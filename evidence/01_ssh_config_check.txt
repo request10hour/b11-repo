@@ -1,0 +1,7 @@
+$ orb -m ubuntu-b11 sudo awk '/^(Port|PermitRootLogin)/ {print FILENAME ":" FNR ":" $0}' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/99-b11-hardening.conf
+/etc/ssh/sshd_config.d/99-b11-hardening.conf:1:Port 20022
+/etc/ssh/sshd_config.d/99-b11-hardening.conf:2:PermitRootLogin no
+
+$ orb -m ubuntu-b11 bash -lc "sudo sshd -T | grep -E '^(port|permitrootlogin) '"
+port 20022
+permitrootlogin no
