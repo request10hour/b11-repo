@@ -183,3 +183,44 @@ UFW 활성화 상태 및 허용 포트 확인:
 원문 증거 로그:
 
 - `evidence/05_user_groups_check.txt`
+
+#### 4.2.3 디렉토리 구조
+
+##### 4.2.3.1 수행 내역
+
+1. 과제 예시를 참고하여 `AGENT_HOME` 기준 경로를 `/home/agent-admin/agent-app`으로 정하였다.
+2. `test -d /home/agent-admin/agent-app`로 앱 홈 디렉터리 존재 여부를 확인하였다.
+3. `test -d /home/agent-admin/agent-app/upload_files`로 업로드 디렉터리 존재 여부를 확인하였다.
+4. `test -d /home/agent-admin/agent-app/api_keys`로 키 파일 보관 디렉터리 존재 여부를 확인하였다.
+5. `test -d /var/log/agent-app`로 앱 로그 디렉터리 존재 여부를 확인하였다.
+6. 네 디렉터리가 아직 없는 것을 확인하였다.
+7. `sudo install -d -o agent-admin -g agent-admin -m 750 /home/agent-admin/agent-app`으로 `AGENT_HOME` 디렉터리를 생성하였다.
+8. `sudo install -d -o agent-admin -g agent-admin -m 750 /home/agent-admin/agent-app/upload_files`로 업로드 파일 디렉터리를 생성하였다.
+9. `sudo install -d -o agent-admin -g agent-admin -m 750 /home/agent-admin/agent-app/api_keys`로 API 키 디렉터리를 생성하였다.
+10. `sudo install -d -o root -g root -m 755 /var/log/agent-app`로 애플리케이션 로그 디렉터리를 생성하였다.
+11. `ls -ld`로 `AGENT_HOME`, `upload_files`, `api_keys`, `/var/log/agent-app`가 모두 생성되었는지 확인하였다.
+12. `find` 명령으로 앱 홈 하위 디렉터리 구조와 `/var/log/agent-app` 경로를 다시 확인하였다.
+
+##### 4.2.3.2 주요 개념
+
+- `AGENT_HOME`이란? 애플리케이션 실행에 필요한 파일과 하위 디렉터리를 모아두는 기준 경로이다.
+- `install -d`란? 디렉터리를 만들면서 소유자, 그룹, 권한을 함께 지정할 수 있는 명령이다.
+- 로그 디렉터리란? 애플리케이션 실행 기록이나 관제 결과를 저장하는 전용 위치이다.
+
+##### 4.2.3.3 확인 결과
+
+- `AGENT_HOME` 생성 완료: `/home/agent-admin/agent-app`
+- 업로드 디렉터리 생성 완료: `/home/agent-admin/agent-app/upload_files`
+- API 키 디렉터리 생성 완료: `/home/agent-admin/agent-app/api_keys`
+- 로그 디렉터리 생성 완료: `/var/log/agent-app`
+- 이번 단계에서는 디렉터리 구조 생성을 완료하였고, 그룹별 접근 권한은 다음 권한 설정 단계에서 세부 조정할 예정이다.
+
+##### 4.2.3.4 증거 자료
+
+`AGENT_HOME` 기준 디렉터리 구조 및 로그 디렉터리 확인:
+
+![디렉토리 구조 확인](screenshots/06_directory_structure_check.png)
+
+원문 증거 로그:
+
+- `evidence/06_directory_structure_check.txt`

@@ -13,6 +13,6 @@ agent-dev:x:1001:1001::/home/agent-dev:/bin/bash
 agent-test:x:1002:1002::/home/agent-test:/bin/bash
 
 $ orb -m ubuntu-b11 ls -ld /home/agent-admin /home/agent-dev /home/agent-test
-drwxr-x--- 1 agent-admin agent-admin 54 May 26 08:38 /home/agent-admin
+drwxr-x--- 1 agent-admin agent-admin 72 May 26 08:48 /home/agent-admin
 drwxr-x--- 1 agent-dev   agent-dev   54 May 26 08:38 /home/agent-dev
 drwxr-x--- 1 agent-test  agent-test  54 May 26 08:38 /home/agent-test

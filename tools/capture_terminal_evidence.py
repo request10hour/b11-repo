@@ -118,6 +118,57 @@ GROUPS = [
             ),
         ],
     ),
+    (
+        "06_directory_structure_check",
+        [
+            (
+                "orb -m ubuntu-b11 sudo bash -lc 'AGENT_HOME=/home/agent-admin/agent-app; printf \"AGENT_HOME=%s\\n\" \"$AGENT_HOME\"; ls -ld \"$AGENT_HOME\" \"$AGENT_HOME/upload_files\" \"$AGENT_HOME/api_keys\" /var/log/agent-app'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "bash",
+                    "-lc",
+                    'AGENT_HOME=/home/agent-admin/agent-app; printf "AGENT_HOME=%s\\n" "$AGENT_HOME"; ls -ld "$AGENT_HOME" "$AGENT_HOME/upload_files" "$AGENT_HOME/api_keys" /var/log/agent-app',
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo find /home/agent-admin/agent-app -maxdepth 2 -type d -printf '%M %u %g %p\\n'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "find",
+                    "/home/agent-admin/agent-app",
+                    "-maxdepth",
+                    "2",
+                    "-type",
+                    "d",
+                    "-printf",
+                    "%M %u %g %p\\n",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo find /var/log/agent-app -maxdepth 0 -type d -printf '%M %u %g %p\\n'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "find",
+                    "/var/log/agent-app",
+                    "-maxdepth",
+                    "0",
+                    "-type",
+                    "d",
+                    "-printf",
+                    "%M %u %g %p\\n",
+                ],
+            ),
+        ],
+    ),
 ]
 
 
