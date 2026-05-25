@@ -59,6 +59,19 @@ GROUPS = [
             ),
         ],
     ),
+    (
+        "03_ufw_firewall_status_check",
+        [
+            (
+                "orb -m ubuntu-b11 sudo ufw status verbose",
+                ["orb", "-m", "ubuntu-b11", "sudo", "ufw", "status", "verbose"],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo ufw status numbered",
+                ["orb", "-m", "ubuntu-b11", "sudo", "ufw", "status", "numbered"],
+            ),
+        ],
+    ),
 ]
 
 

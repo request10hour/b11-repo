@@ -66,3 +66,42 @@ SSH 서비스 상태 및 포트 리슨 확인:
 - `evidence/01_ssh_config_check.txt`
 - `evidence/02_ssh_port_listen_check.txt`
 
+#### 4.1.2 방화벽 설정
+
+##### 4.1.2.1 수행 내역
+
+1. `ubuntu-b11` 환경에서 `ufw`와 `firewall-cmd` 설치 여부를 확인하였다.
+2. 두 도구가 모두 설치되어 있지 않아, 과제 확인 방법이 간단한 UFW를 선택하였다.
+3. `sudo apt-get install -y ufw`로 UFW를 설치하였다.
+4. `sudo ufw default deny incoming`으로 외부에서 들어오는 기본 연결을 차단하였다.
+5. `sudo ufw default allow outgoing`으로 서버에서 외부로 나가는 연결은 허용하였다.
+6. `sudo ufw allow 20022/tcp`로 SSH 접속용 포트만 허용하였다.
+7. `sudo ufw allow 15034/tcp`로 애플리케이션 실행 포트만 허용하였다.
+8. `sudo ufw --force enable`로 방화벽을 활성화하고 부팅 시에도 적용되도록 하였다.
+9. `sudo ufw status verbose`로 방화벽 상태가 `active`인지 확인하였다.
+10. 같은 출력에서 기본 정책이 `deny (incoming)`이고 허용 포트가 `20022/tcp`, `15034/tcp`만 있는지 확인하였다.
+11. `sudo ufw status numbered`로 등록된 인바운드 허용 규칙을 번호 목록으로 다시 확인하였다.
+
+##### 4.1.2.2 주요 개념
+
+- UFW란? Uncomplicated Firewall의 약자로, 복잡한 방화벽 규칙을 간단한 명령어로 관리할 수 있게 해주는 Ubuntu의 방화벽 도구이다.
+- 인바운드 규칙이란? 외부에서 서버 내부로 들어오는 네트워크 접속을 허용하거나 차단하는 규칙이다.
+- 최소 허용 정책이란? 필요한 포트만 열어두고 나머지 접근은 차단하여 공격 가능성을 줄이는 보안 방식이다.
+
+##### 4.1.2.3 확인 결과
+
+- 방화벽 도구 선택: UFW
+- 방화벽 상태: `active`
+- 기본 인바운드 정책: `deny`
+- 허용된 인바운드 포트: `20022/tcp`, `15034/tcp`
+- IPv6 규칙도 동일하게 `20022/tcp`, `15034/tcp`만 허용됨
+
+##### 4.1.2.4 증거 자료
+
+UFW 활성화 상태 및 허용 포트 확인:
+
+![UFW 방화벽 상태 확인](screenshots/03_ufw_firewall_status_check.png)
+
+원문 증거 로그:
+
+- `evidence/03_ufw_firewall_status_check.txt`
