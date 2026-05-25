@@ -1,0 +1,12 @@
+$ orb -m ubuntu-b11 getent group agent-common agent-core
+agent-common:x:1003:agent-admin,agent-dev,agent-test
+agent-core:x:1004:agent-admin,agent-dev
+
+$ orb -m ubuntu-b11 id agent-admin
+uid=1000(agent-admin) gid=1000(agent-admin) groups=1000(agent-admin),1003(agent-common),1004(agent-core)
+
+$ orb -m ubuntu-b11 id agent-dev
+uid=1001(agent-dev) gid=1001(agent-dev) groups=1001(agent-dev),1003(agent-common),1004(agent-core)
+
+$ orb -m ubuntu-b11 id agent-test
+uid=1002(agent-test) gid=1002(agent-test) groups=1002(agent-test),1003(agent-common)

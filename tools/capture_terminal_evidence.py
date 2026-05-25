@@ -97,6 +97,27 @@ GROUPS = [
             ),
         ],
     ),
+    (
+        "05_user_groups_check",
+        [
+            (
+                "orb -m ubuntu-b11 getent group agent-common agent-core",
+                ["orb", "-m", "ubuntu-b11", "getent", "group", "agent-common", "agent-core"],
+            ),
+            (
+                "orb -m ubuntu-b11 id agent-admin",
+                ["orb", "-m", "ubuntu-b11", "id", "agent-admin"],
+            ),
+            (
+                "orb -m ubuntu-b11 id agent-dev",
+                ["orb", "-m", "ubuntu-b11", "id", "agent-dev"],
+            ),
+            (
+                "orb -m ubuntu-b11 id agent-test",
+                ["orb", "-m", "ubuntu-b11", "id", "agent-test"],
+            ),
+        ],
+    ),
 ]
 
 

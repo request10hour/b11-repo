@@ -144,3 +144,42 @@ UFW 활성화 상태 및 허용 포트 확인:
 원문 증거 로그:
 
 - `evidence/04_user_accounts_check.txt`
+
+#### 4.2.2 생성 그룹
+
+##### 4.2.2.1 수행 내역
+
+1. `getent group agent-common`과 `getent group agent-core`로 기존 그룹 존재 여부를 확인하였다.
+2. 두 그룹이 아직 존재하지 않는 것을 확인하였다.
+3. `sudo groupadd agent-common`으로 공통 협업용 그룹을 생성하였다.
+4. `sudo groupadd agent-core`로 핵심 운영 자원 접근용 그룹을 생성하였다.
+5. `sudo usermod -aG agent-common agent-admin`으로 `agent-admin`을 `agent-common` 그룹에 추가하였다.
+6. `sudo usermod -aG agent-common agent-dev`로 `agent-dev`를 `agent-common` 그룹에 추가하였다.
+7. `sudo usermod -aG agent-common agent-test`로 `agent-test`를 `agent-common` 그룹에 추가하였다.
+8. `sudo usermod -aG agent-core agent-admin`으로 `agent-admin`을 `agent-core` 그룹에 추가하였다.
+9. `sudo usermod -aG agent-core agent-dev`로 `agent-dev`를 `agent-core` 그룹에 추가하였다.
+10. `getent group agent-common agent-core`로 두 그룹의 구성원이 요구사항대로 등록되었는지 확인하였다.
+11. `id agent-admin`, `id agent-dev`, `id agent-test`로 각 사용자의 실제 보조 그룹 소속을 확인하였다.
+
+##### 4.2.2.2 주요 개념
+
+- 그룹이란? 여러 사용자에게 같은 권한을 한 번에 부여하기 위해 사용하는 리눅스 권한 관리 단위이다.
+- 보조 그룹이란? 사용자의 기본 그룹 외에 추가로 소속되는 그룹이며, 공유 디렉터리 접근 권한을 줄 때 활용된다.
+- `usermod -aG`란? 기존 그룹 소속을 유지하면서 사용자를 새 보조 그룹에 추가하는 명령이다.
+
+##### 4.2.2.3 확인 결과
+
+- `agent-common` 그룹 생성 완료: `agent-admin`, `agent-dev`, `agent-test` 포함
+- `agent-core` 그룹 생성 완료: `agent-admin`, `agent-dev` 포함
+- `agent-test`는 `agent-core`에 포함하지 않아 핵심 자원 접근 대상을 제한함
+- 역할별 그룹을 분리하여 협업 영역과 핵심 운영 영역을 나눌 준비를 완료함
+
+##### 4.2.2.4 증거 자료
+
+그룹 생성 여부 및 사용자별 그룹 소속 확인:
+
+![사용자 그룹 생성 확인](screenshots/05_user_groups_check.png)
+
+원문 증거 로그:
+
+- `evidence/05_user_groups_check.txt`
