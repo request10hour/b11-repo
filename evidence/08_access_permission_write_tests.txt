@@ -1,0 +1,26 @@
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'touch /home/agent-admin/agent-app/upload_files/admin_upload_test && rm /home/agent-admin/agent-app/upload_files/admin_upload_test && echo "agent-admin upload_files write: OK"'
+agent-admin upload_files write: OK
+
+$ orb -m ubuntu-b11 sudo -u agent-dev bash -lc 'touch /home/agent-admin/agent-app/upload_files/dev_upload_test && rm /home/agent-admin/agent-app/upload_files/dev_upload_test && echo "agent-dev upload_files write: OK"'
+agent-dev upload_files write: OK
+
+$ orb -m ubuntu-b11 sudo -u agent-test bash -lc 'touch /home/agent-admin/agent-app/upload_files/test_upload_test && rm /home/agent-admin/agent-app/upload_files/test_upload_test && echo "agent-test upload_files write: OK"'
+agent-test upload_files write: OK
+
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'touch /home/agent-admin/agent-app/api_keys/admin_key_test && rm /home/agent-admin/agent-app/api_keys/admin_key_test && echo "agent-admin api_keys write: OK"'
+agent-admin api_keys write: OK
+
+$ orb -m ubuntu-b11 sudo -u agent-dev bash -lc 'touch /home/agent-admin/agent-app/api_keys/dev_key_test && rm /home/agent-admin/agent-app/api_keys/dev_key_test && echo "agent-dev api_keys write: OK"'
+agent-dev api_keys write: OK
+
+$ orb -m ubuntu-b11 sudo -u agent-test bash -lc 'if touch /home/agent-admin/agent-app/api_keys/test_key_denied 2>/dev/null; then rm -f /home/agent-admin/agent-app/api_keys/test_key_denied; echo "agent-test api_keys write: UNEXPECTED_OK"; exit 1; else echo "agent-test api_keys write: DENIED (expected)"; fi'
+agent-test api_keys write: DENIED (expected)
+
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'touch /var/log/agent-app/admin_log_test && rm /var/log/agent-app/admin_log_test && echo "agent-admin log write: OK"'
+agent-admin log write: OK
+
+$ orb -m ubuntu-b11 sudo -u agent-dev bash -lc 'touch /var/log/agent-app/dev_log_test && rm /var/log/agent-app/dev_log_test && echo "agent-dev log write: OK"'
+agent-dev log write: OK
+
+$ orb -m ubuntu-b11 sudo -u agent-test bash -lc 'if touch /var/log/agent-app/test_log_denied 2>/dev/null; then rm -f /var/log/agent-app/test_log_denied; echo "agent-test log write: UNEXPECTED_OK"; exit 1; else echo "agent-test log write: DENIED (expected)"; fi'
+agent-test log write: DENIED (expected)

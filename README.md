@@ -224,3 +224,57 @@ UFW 활성화 상태 및 허용 포트 확인:
 원문 증거 로그:
 
 - `evidence/06_directory_structure_check.txt`
+
+#### 4.2.4 접근 권한
+
+##### 4.2.4.1 수행 내역
+
+1. `command -v getfacl`과 `command -v setfacl`로 ACL 확인 도구 설치 여부를 확인하였다.
+2. ACL 도구가 설치되어 있지 않아 `sudo apt-get install -y acl`로 `acl` 패키지를 설치하였다.
+3. `id agent-admin`, `id agent-dev`, `id agent-test`로 각 계정의 그룹 소속을 다시 확인하였다.
+4. `/home/agent-admin`은 다른 사용자에게 기본 접근이 막혀 있으므로 `sudo setfacl -m g:agent-common:x /home/agent-admin`으로 필요한 경로 탐색 권한만 부여하였다.
+5. `sudo chown agent-admin:agent-common /home/agent-admin/agent-app`으로 `AGENT_HOME`의 그룹을 공통 그룹 기준으로 맞추었다.
+6. `sudo chmod 2750 /home/agent-admin/agent-app`으로 그룹이 읽고 들어갈 수 있게 하고, setgid 비트를 적용하였다.
+7. `sudo chown agent-admin:agent-common /home/agent-admin/agent-app/upload_files`로 `upload_files`의 그룹을 `agent-common`으로 지정하였다.
+8. `sudo chmod 2770 /home/agent-admin/agent-app/upload_files`로 `agent-common` 그룹 구성원이 읽고 쓸 수 있게 설정하였다.
+9. `sudo chown agent-admin:agent-core /home/agent-admin/agent-app/api_keys`로 `api_keys`의 그룹을 `agent-core`로 지정하였다.
+10. `sudo chmod 2770 /home/agent-admin/agent-app/api_keys`로 `agent-core` 그룹만 읽고 쓸 수 있게 설정하였다.
+11. `sudo chown root:agent-core /var/log/agent-app`로 로그 디렉터리 그룹을 `agent-core`로 지정하였다.
+12. `sudo chmod 2770 /var/log/agent-app`로 `agent-core` 그룹만 로그 디렉터리에 읽기/쓰기 가능하도록 설정하였다.
+13. `setfacl -d`로 `upload_files`, `api_keys`, `/var/log/agent-app`에 기본 ACL을 설정하여 새 파일도 그룹 권한을 유지하도록 하였다.
+14. `ls -ld`로 각 디렉터리의 소유자, 그룹, 권한을 확인하였다.
+15. `getfacl`로 ACL 및 기본 ACL 적용 상태를 확인하였다.
+16. `agent-admin`, `agent-dev`, `agent-test` 계정으로 `upload_files` 쓰기 테스트를 하여 세 계정 모두 쓰기 가능함을 확인하였다.
+17. `agent-admin`, `agent-dev` 계정으로 `api_keys` 쓰기 테스트를 하여 `agent-core` 구성원만 쓰기 가능함을 확인하였다.
+18. `agent-test` 계정으로 `api_keys` 쓰기 테스트를 하여 접근이 거부되는 것을 확인하였다.
+19. `agent-admin`, `agent-dev` 계정으로 `/var/log/agent-app` 쓰기 테스트를 하여 `agent-core` 구성원만 쓰기 가능함을 확인하였다.
+20. `agent-test` 계정으로 `/var/log/agent-app` 쓰기 테스트를 하여 접근이 거부되는 것을 확인하였다.
+
+##### 4.2.4.2 주요 개념
+
+- R/W 권한이란? 읽기(Read)와 쓰기(Write) 권한을 의미하며, 디렉터리에서는 파일 목록 확인과 파일 생성/수정에 영향을 준다.
+- ACL이란? 기본 소유자/그룹/기타 권한보다 세밀하게 접근 권한을 지정할 수 있는 리눅스 권한 기능이다.
+- setgid 디렉터리란? 디렉터리 안에 새 파일을 만들 때 부모 디렉터리의 그룹을 이어받게 하는 설정이다.
+
+##### 4.2.4.3 확인 결과
+
+- `upload_files`: 그룹 `agent-common`, 권한 `rwx`로 설정되어 `agent-admin`, `agent-dev`, `agent-test` 모두 R/W 가능
+- `api_keys`: 그룹 `agent-core`, 권한 `rwx`로 설정되어 `agent-admin`, `agent-dev`만 R/W 가능
+- `/var/log/agent-app`: 그룹 `agent-core`, 권한 `rwx`로 설정되어 `agent-admin`, `agent-dev`만 R/W 가능
+- `agent-test`는 `agent-core`에 속하지 않기 때문에 `api_keys`와 `/var/log/agent-app` 쓰기가 거부됨
+- `other` 권한은 `---`로 두어 그룹 외 사용자의 접근을 차단함
+
+##### 4.2.4.4 증거 자료
+
+계정 그룹 소속, 디렉터리 소유/권한, ACL 확인:
+
+![접근 권한 메타데이터 확인](screenshots/07_access_permission_metadata_check.png)
+
+사용자별 쓰기 가능 여부 확인:
+
+![접근 권한 쓰기 테스트](screenshots/08_access_permission_write_tests.png)
+
+원문 증거 로그:
+
+- `evidence/07_access_permission_metadata_check.txt`
+- `evidence/08_access_permission_write_tests.txt`

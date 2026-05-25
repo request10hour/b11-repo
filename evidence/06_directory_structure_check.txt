@@ -1,14 +1,14 @@
 $ orb -m ubuntu-b11 sudo bash -lc 'AGENT_HOME=/home/agent-admin/agent-app; printf "AGENT_HOME=%s\n" "$AGENT_HOME"; ls -ld "$AGENT_HOME" "$AGENT_HOME/upload_files" "$AGENT_HOME/api_keys" /var/log/agent-app'
 AGENT_HOME=/home/agent-admin/agent-app
-drwxr-x--- 1 agent-admin agent-admin 40 May 26 08:48 /home/agent-admin/agent-app
-drwxr-x--- 1 agent-admin agent-admin  0 May 26 08:48 /home/agent-admin/agent-app/api_keys
-drwxr-x--- 1 agent-admin agent-admin  0 May 26 08:48 /home/agent-admin/agent-app/upload_files
-drwxr-xr-x 1 root        root         0 May 26 08:48 /var/log/agent-app
+drwxr-s---  1 agent-admin agent-common 40 May 26 08:48 /home/agent-admin/agent-app
+drwxrws---+ 1 agent-admin agent-core    0 May 26 08:52 /home/agent-admin/agent-app/api_keys
+drwxrws---+ 1 agent-admin agent-common  0 May 26 08:52 /home/agent-admin/agent-app/upload_files
+drwxrws---+ 1 root        agent-core    0 May 26 08:53 /var/log/agent-app
 
 $ orb -m ubuntu-b11 sudo find /home/agent-admin/agent-app -maxdepth 2 -type d -printf '%M %u %g %p\n'
-drwxr-x--- agent-admin agent-admin /home/agent-admin/agent-app
-drwxr-x--- agent-admin agent-admin /home/agent-admin/agent-app/api_keys
-drwxr-x--- agent-admin agent-admin /home/agent-admin/agent-app/upload_files
+drwxr-s--- agent-admin agent-common /home/agent-admin/agent-app
+drwxrws--- agent-admin agent-core /home/agent-admin/agent-app/api_keys
+drwxrws--- agent-admin agent-common /home/agent-admin/agent-app/upload_files
 
 $ orb -m ubuntu-b11 sudo find /var/log/agent-app -maxdepth 0 -type d -printf '%M %u %g %p\n'
-drwxr-xr-x root root /var/log/agent-app
+drwxrws--- root agent-core /var/log/agent-app
