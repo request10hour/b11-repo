@@ -72,6 +72,31 @@ GROUPS = [
             ),
         ],
     ),
+    (
+        "04_user_accounts_check",
+        [
+            (
+                "orb -m ubuntu-b11 id agent-admin",
+                ["orb", "-m", "ubuntu-b11", "id", "agent-admin"],
+            ),
+            (
+                "orb -m ubuntu-b11 id agent-dev",
+                ["orb", "-m", "ubuntu-b11", "id", "agent-dev"],
+            ),
+            (
+                "orb -m ubuntu-b11 id agent-test",
+                ["orb", "-m", "ubuntu-b11", "id", "agent-test"],
+            ),
+            (
+                "orb -m ubuntu-b11 getent passwd agent-admin agent-dev agent-test",
+                ["orb", "-m", "ubuntu-b11", "getent", "passwd", "agent-admin", "agent-dev", "agent-test"],
+            ),
+            (
+                "orb -m ubuntu-b11 ls -ld /home/agent-admin /home/agent-dev /home/agent-test",
+                ["orb", "-m", "ubuntu-b11", "ls", "-ld", "/home/agent-admin", "/home/agent-dev", "/home/agent-test"],
+            ),
+        ],
+    ),
 ]
 
 

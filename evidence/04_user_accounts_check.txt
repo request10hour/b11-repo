@@ -1,0 +1,18 @@
+$ orb -m ubuntu-b11 id agent-admin
+uid=1000(agent-admin) gid=1000(agent-admin) groups=1000(agent-admin)
+
+$ orb -m ubuntu-b11 id agent-dev
+uid=1001(agent-dev) gid=1001(agent-dev) groups=1001(agent-dev)
+
+$ orb -m ubuntu-b11 id agent-test
+uid=1002(agent-test) gid=1002(agent-test) groups=1002(agent-test)
+
+$ orb -m ubuntu-b11 getent passwd agent-admin agent-dev agent-test
+agent-admin:x:1000:1000::/home/agent-admin:/bin/bash
+agent-dev:x:1001:1001::/home/agent-dev:/bin/bash
+agent-test:x:1002:1002::/home/agent-test:/bin/bash
+
+$ orb -m ubuntu-b11 ls -ld /home/agent-admin /home/agent-dev /home/agent-test
+drwxr-x--- 1 agent-admin agent-admin 54 May 26 08:38 /home/agent-admin
+drwxr-x--- 1 agent-dev   agent-dev   54 May 26 08:38 /home/agent-dev
+drwxr-x--- 1 agent-test  agent-test  54 May 26 08:38 /home/agent-test

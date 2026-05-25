@@ -105,3 +105,42 @@ UFW 활성화 상태 및 허용 포트 확인:
 원문 증거 로그:
 
 - `evidence/03_ufw_firewall_status_check.txt`
+
+### 4.2 계정/그룹/권한 체계
+
+#### 4.2.1 생성 계정
+
+##### 4.2.1.1 수행 내역
+
+1. `ubuntu-b11` 환경에서 `getent passwd agent-admin`, `getent passwd agent-dev`, `getent passwd agent-test`로 기존 계정 존재 여부를 확인하였다.
+2. 세 계정이 아직 존재하지 않는 것을 확인하였다.
+3. `sudo useradd -m -s /bin/bash agent-admin`으로 운영/관리 및 cron 실행 담당 계정을 생성하였다.
+4. `sudo useradd -m -s /bin/bash agent-dev`로 개발/운영 및 `monitor.sh` 작성 담당 계정을 생성하였다.
+5. `sudo useradd -m -s /bin/bash agent-test`로 QA/테스트 담당 계정을 생성하였다.
+6. `id agent-admin`, `id agent-dev`, `id agent-test`로 각 계정의 UID, GID, 기본 그룹을 확인하였다.
+7. `getent passwd agent-admin agent-dev agent-test`로 세 계정의 홈 디렉터리와 로그인 shell이 등록되었는지 확인하였다.
+8. `ls -ld /home/agent-admin /home/agent-dev /home/agent-test`로 각 계정의 홈 디렉터리가 생성되었는지 확인하였다.
+
+##### 4.2.1.2 주요 개념
+
+- 사용자 계정이란? 리눅스에서 사람 또는 서비스가 시스템 자원에 접근할 때 사용하는 기본 단위이다.
+- UID/GID란? UID는 사용자 식별 번호, GID는 그룹 식별 번호로 리눅스가 권한을 판단할 때 사용한다.
+- 최소 권한 원칙이란? 계정마다 필요한 역할만 부여하고 불필요한 관리자 권한은 주지 않는 보안 원칙이다.
+
+##### 4.2.1.3 확인 결과
+
+- `agent-admin` 계정 생성 완료: 운영/관리 및 cron 실행자 역할
+- `agent-dev` 계정 생성 완료: 개발/운영 및 `monitor.sh` 작성자 역할
+- `agent-test` 계정 생성 완료: QA/테스트 역할
+- 세 계정 모두 `/home/<계정명>` 홈 디렉터리와 `/bin/bash` shell을 가진 일반 사용자로 생성됨
+- 현재 단계에서는 sudo 권한을 추가하지 않아 불필요한 관리자 권한을 부여하지 않음
+
+##### 4.2.1.4 증거 자료
+
+계정 생성 여부, UID/GID, 홈 디렉터리 확인:
+
+![사용자 계정 생성 확인](screenshots/04_user_accounts_check.png)
+
+원문 증거 로그:
+
+- `evidence/04_user_accounts_check.txt`
