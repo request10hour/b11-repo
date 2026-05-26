@@ -1,9 +1,9 @@
 $ orb -m ubuntu-b11 sudo bash -lc 'AGENT_HOME=/home/agent-admin/agent-app; printf "AGENT_HOME=%s\n" "$AGENT_HOME"; ls -ld "$AGENT_HOME" "$AGENT_HOME/upload_files" "$AGENT_HOME/api_keys" /var/log/agent-app'
 AGENT_HOME=/home/agent-admin/agent-app
 drwxr-s---  1 agent-admin agent-common 58 May 26 08:57 /home/agent-admin/agent-app
-drwxrws---+ 1 agent-admin agent-core    0 May 26 08:54 /home/agent-admin/agent-app/api_keys
-drwxrws---+ 1 agent-admin agent-common  0 May 26 08:54 /home/agent-admin/agent-app/upload_files
-drwxrws---+ 1 root        agent-core    0 May 26 08:54 /var/log/agent-app
+drwxrws---+ 1 agent-admin agent-core   24 May 26 09:01 /home/agent-admin/agent-app/api_keys
+drwxrws---+ 1 agent-admin agent-common  0 May 26 08:58 /home/agent-admin/agent-app/upload_files
+drwxrws---+ 1 root        agent-core    0 May 26 08:58 /var/log/agent-app
 
 $ orb -m ubuntu-b11 sudo find /home/agent-admin/agent-app -maxdepth 2 -type d -printf '%M %u %g %p\n'
 drwxr-s--- agent-admin agent-common /home/agent-admin/agent-app

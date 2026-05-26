@@ -416,6 +416,74 @@ GROUPS = [
             ),
         ],
     ),
+    (
+        "10_key_file_check",
+        [
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'printf \"AGENT_KEY_PATH=%s\\n\" \"$AGENT_KEY_PATH\"'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "-u",
+                    "agent-admin",
+                    "bash",
+                    "-lc",
+                    'printf "AGENT_KEY_PATH=%s\\n" "$AGENT_KEY_PATH"',
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo ls -l /home/agent-admin/agent-app/api_keys/t_secret.key",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "ls",
+                    "-l",
+                    "/home/agent-admin/agent-app/api_keys/t_secret.key",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo wc -l /home/agent-admin/agent-app/api_keys/t_secret.key",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "wc",
+                    "-l",
+                    "/home/agent-admin/agent-app/api_keys/t_secret.key",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo cat /home/agent-admin/agent-app/api_keys/t_secret.key",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "cat",
+                    "/home/agent-admin/agent-app/api_keys/t_secret.key",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'test \"$(cat \"$AGENT_KEY_PATH\")\" = \"agent_api_key_test\" && echo \"key content: OK\"'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "-u",
+                    "agent-admin",
+                    "bash",
+                    "-lc",
+                    'test "$(cat "$AGENT_KEY_PATH")" = "agent_api_key_test" && echo "key content: OK"',
+                ],
+            ),
+        ],
+    ),
 ]
 
 

@@ -332,3 +332,43 @@ UFW 활성화 상태 및 허용 포트 확인:
 원문 증거 로그:
 
 - `evidence/09_agent_environment_variables_check.txt`
+
+#### 4.3.2 키 파일 생성
+
+##### 4.3.2.1 수행 내역
+
+1. `sudo -u agent-admin bash -lc 'printf "%s\n" "$AGENT_KEY_PATH"'`로 환경 변수에 등록된 키 파일 경로를 확인하였다.
+2. `test -f /home/agent-admin/agent-app/api_keys/t_secret.key`로 기존 키 파일 존재 여부를 확인하였다.
+3. 키 파일이 아직 존재하지 않는 것을 확인하였다.
+4. `sudo -u agent-admin bash -lc 'printf "agent_api_key_test\n" > "$AGENT_KEY_PATH"'`로 키 파일을 생성하였다.
+5. `sudo chown agent-admin:agent-core /home/agent-admin/agent-app/api_keys/t_secret.key`로 키 파일 소유자와 그룹을 지정하였다.
+6. `sudo chmod 660 /home/agent-admin/agent-app/api_keys/t_secret.key`로 소유자와 `agent-core` 그룹만 읽고 쓸 수 있게 설정하였다.
+7. `ls -l`로 키 파일의 소유자, 그룹, 권한을 확인하였다.
+8. `wc -l`로 키 파일 내용이 1줄인지 확인하였다.
+9. `cat`으로 키 파일 내용이 `agent_api_key_test`인지 확인하였다.
+10. `agent-admin` 계정에서 `test "$(cat "$AGENT_KEY_PATH")" = "agent_api_key_test"`로 앱 실행 계정 기준에서도 내용 검증이 되는지 확인하였다.
+
+##### 4.3.2.2 주요 개념
+
+- 키 파일이란? 앱이 실행될 때 인증 값이나 비밀 값을 파일로 읽을 수 있도록 저장한 파일이다.
+- `chmod 660`이란? 소유자와 그룹에는 읽기/쓰기 권한을 주고, 기타 사용자에게는 권한을 주지 않는 설정이다.
+- `wc -l`이란? 파일의 줄 수를 확인하는 명령으로, 이번에는 키 값이 한 줄로 저장되었는지 확인하는 데 사용하였다.
+
+##### 4.3.2.3 확인 결과
+
+- 키 파일 경로: `/home/agent-admin/agent-app/api_keys/t_secret.key`
+- 키 파일 내용: `agent_api_key_test`
+- 줄 수: `1`
+- 소유자/그룹: `agent-admin:agent-core`
+- 권한: `-rw-rw----`
+- `agent-admin` 계정 기준으로 환경 변수 경로와 실제 키 파일 내용이 일치함
+
+##### 4.3.2.4 증거 자료
+
+키 파일 경로, 권한, 줄 수, 내용 확인:
+
+![키 파일 생성 확인](screenshots/10_key_file_check.png)
+
+원문 증거 로그:
+
+- `evidence/10_key_file_check.txt`

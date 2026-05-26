@@ -1,0 +1,14 @@
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'printf "AGENT_KEY_PATH=%s\n" "$AGENT_KEY_PATH"'
+AGENT_KEY_PATH=/home/agent-admin/agent-app/api_keys/t_secret.key
+
+$ orb -m ubuntu-b11 sudo ls -l /home/agent-admin/agent-app/api_keys/t_secret.key
+-rw-rw---- 1 agent-admin agent-core 19 May 26 09:01 /home/agent-admin/agent-app/api_keys/t_secret.key
+
+$ orb -m ubuntu-b11 sudo wc -l /home/agent-admin/agent-app/api_keys/t_secret.key
+1 /home/agent-admin/agent-app/api_keys/t_secret.key
+
+$ orb -m ubuntu-b11 sudo cat /home/agent-admin/agent-app/api_keys/t_secret.key
+agent_api_key_test
+
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'test "$(cat "$AGENT_KEY_PATH")" = "agent_api_key_test" && echo "key content: OK"'
+key content: OK

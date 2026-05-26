@@ -26,7 +26,8 @@ $ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'ls -l "$AGENT_HOME/agent-app" 
 -rwxr-x---  1 agent-admin agent-core   7926296 May 26 08:57 /home/agent-admin/agent-app/agent-app
 
 /home/agent-admin/agent-app/api_keys:
-total 0
+total 4
+-rw-rw---- 1 agent-admin agent-core 19 May 26 09:01 t_secret.key
 
 /home/agent-admin/agent-app/upload_files:
 total 0
