@@ -24,6 +24,7 @@
 12. `sshd_config.d` 설정 파일에서 `Port 20022`, `PermitRootLogin no`가 들어간 것을 확인하였다.
 13. `sudo sshd -T`로 실제 적용된 설정도 `port 20022`, `permitrootlogin no`임을 확인하였다.
 14. `sudo ss -tulnp`로 `sshd`가 `0.0.0.0:20022`와 `[::]:20022`에서 LISTEN 상태임을 확인하였다.
+    > `ss -tulnp`의 옵션은 `-t`(TCP 소켓 표시), `-u`(UDP 소켓 표시), `-l`(접속 대기 중인 포트 표시), `-n`(포트와 주소를 숫자로 표시), `-p`(해당 포트를 사용하는 프로세스 표시)를 의미한다.
 
 ##### 1.1.2 주요 개념
 
