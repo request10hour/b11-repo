@@ -70,6 +70,7 @@ SSH 서비스 상태 및 포트 리슨 확인:
 9. `sudo ufw status verbose`로 방화벽 상태가 `active`인지 확인하였다.
 10. 같은 출력에서 기본 정책이 `deny (incoming)`이고 허용 포트가 `20022/tcp`, `15034/tcp`만 있는지 확인하였다.
 11. `sudo ufw status numbered`로 등록된 인바운드 허용 규칙을 번호 목록으로 다시 확인하였다.
+    > 번호로 규칙을 삭제하거나 관리하기 쉽게 해준다. 예: `sudo ufw delete 1`
 
 ##### 1.2.2 주요 개념
 
