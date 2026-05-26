@@ -374,6 +374,7 @@ UFW 활성화 상태 및 허용 포트 확인:
 ##### 3.3.1 수행 내역
 
 1. `pgrep -a -u agent-admin -f agent-app`로 기존 앱 프로세스가 실행 중인지 확인하였다.
+   > `-a`는 PID와 전체 명령줄을 함께 출력하고, `-u agent-admin`은 `agent-admin` 사용자의 프로세스만 검색하며, `-f agent-app`은 전체 명령줄에서 `agent-app` 문자열을 검색한다.
 2. `ss -tulnp | grep ':15034'`로 앱 포트가 이미 사용 중인지 확인하였다.
 3. 실행 중인 앱 프로세스와 `15034` 리슨 포트가 없는 것을 확인하였다.
 4. `sudo -u agent-admin bash -lc 'ls -l "$AGENT_HOME/agent-app"; env | grep ^AGENT_ | sort'`로 실행 파일과 환경 변수를 다시 확인하였다.
