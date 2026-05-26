@@ -12,6 +12,7 @@
 2. `sshd`가 설치되어 있지 않아 `sudo apt-get update`를 실행하였다.
 3. `sudo apt-get install -y openssh-server`로 OpenSSH 서버를 설치하였다.
 4. 제출 저장소에 `config/99-b11-hardening.conf` 파일을 만들었다.
+   - 참고로 파일명 앞의 `99-`는 `/etc/ssh/sshd_config.d/` 안에서 설정 파일이 이름순으로 읽히는 점을 고려하여, 이 보안 강화 설정이 뒤쪽에서 적용되도록 붙인 것이다.
 5. 해당 설정 파일에 `Port 20022`를 작성하여 SSH 접속 포트를 20022번으로 지정하였다.
 6. 같은 설정 파일에 `PermitRootLogin no`를 작성하여 Root 원격 로그인을 차단하였다.
 7. `/etc/ssh/sshd_config.d/` 디렉터리를 생성하고 설정 파일을 배포하였다.
