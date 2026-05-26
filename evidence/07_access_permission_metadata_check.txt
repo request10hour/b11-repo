@@ -4,11 +4,11 @@ uid=1001(agent-dev) gid=1001(agent-dev) groups=1001(agent-dev),1003(agent-common
 uid=1002(agent-test) gid=1002(agent-test) groups=1002(agent-test),1003(agent-common)
 
 $ orb -m ubuntu-b11 sudo ls -ld /home/agent-admin /home/agent-admin/agent-app /home/agent-admin/agent-app/upload_files /home/agent-admin/agent-app/api_keys /var/log/agent-app
-drwxr-x---+ 1 agent-admin agent-admin  72 May 26 08:48 /home/agent-admin
-drwxr-s---  1 agent-admin agent-common 84 May 26 09:05 /home/agent-admin/agent-app
-drwxrws---+ 1 agent-admin agent-core   24 May 26 09:09 /home/agent-admin/agent-app/api_keys
-drwxrws---+ 1 agent-admin agent-common  0 May 26 09:09 /home/agent-admin/agent-app/upload_files
-drwxrws---+ 1 root        agent-core   62 May 26 09:09 /var/log/agent-app
+drwxr-x---+ 1 agent-admin agent-admin   72 May 26 08:48 /home/agent-admin
+drwxr-s---  1 agent-admin agent-common  90 May 26 09:15 /home/agent-admin/agent-app
+drwxrws---+ 1 agent-admin agent-core    24 May 26 09:11 /home/agent-admin/agent-app/api_keys
+drwxrws---+ 1 agent-admin agent-common   0 May 26 09:11 /home/agent-admin/agent-app/upload_files
+drwxrws---+ 1 root        agent-core   110 May 26 09:18 /var/log/agent-app
 
 $ orb -m ubuntu-b11 sudo getfacl -p /home/agent-admin /home/agent-admin/agent-app /home/agent-admin/agent-app/upload_files /home/agent-admin/agent-app/api_keys /var/log/agent-app
 # file: /home/agent-admin

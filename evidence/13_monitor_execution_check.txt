@@ -1,0 +1,19 @@
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc '/home/agent-admin/agent-app/bin/monitor.sh'
+====== SYSTEM MONITOR RESULT ======
+
+[HEALTH CHECK]
+Checking process 'agent-app'... [OK] (PID: 5822)
+Checking port 15034... [OK]
+Checking firewall (UFW)... [OK]
+
+[RESOURCE MONITORING]
+CPU Usage : 1.8%
+MEM Usage : 4.1%
+DISK Used : 1%
+
+
+[INFO] Log appended: /var/log/agent-app/monitor.log
+
+$ orb -m ubuntu-b11 sudo tail -n 5 /var/log/agent-app/monitor.log
+[2026-05-26 09:18:36] PID:5822 CPU:2.2% MEM:4.7% DISK_USED:1%
+[2026-05-26 09:20:01] PID:5822 CPU:1.8% MEM:4.1% DISK_USED:1%

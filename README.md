@@ -418,3 +418,75 @@ Boot Sequence, 일반 계정 실행, `15034` 포트 LISTEN 확인:
 원문 증거 로그:
 
 - `evidence/11_agent_run_success_check.txt`
+
+### 4.4 시스템 관제 자동화 스크립트(monitor.sh) 구현
+
+#### 4.4.1 수행 내역
+
+1. 제출용 소스 파일로 저장소 루트에 `monitor.sh`를 작성하였다.
+2. 스크립트 상단에서 `/etc/profile.d/agent-app.sh`를 읽어 cron 환경에서도 `AGENT_HOME`, `AGENT_PORT`, `AGENT_LOG_DIR` 값을 사용할 수 있게 하였다.
+3. 프로세스 Health Check는 `pgrep -u agent-admin -x agent-app`으로 구현하였다.
+4. 앱 프로세스가 없으면 `[ERROR] agent-app process is not running`을 출력하고 `exit 1`로 종료하도록 하였다.
+5. 포트 Health Check는 `ss -tuln`으로 TCP `15034` LISTEN 상태를 확인하도록 구현하였다.
+6. 포트가 LISTEN 상태가 아니면 `[ERROR] TCP 15034 is not LISTEN`을 출력하고 `exit 1`로 종료하도록 하였다.
+7. 방화벽 상태 점검은 UFW 설정 파일의 `ENABLED=yes`를 확인하는 방식으로 구현하였다.
+8. 방화벽이 비활성 상태이면 `[WARNING]`만 출력하고 스크립트는 계속 실행되도록 하였다.
+9. CPU 사용률은 `/proc/stat`을 두 번 읽어 전체 CPU 사용 비율을 계산하도록 구현하였다.
+10. 메모리 사용률은 `free` 명령으로 계산하였다.
+11. 루트 파티션 디스크 사용률은 `df /` 명령으로 수집하였다.
+12. CPU `20%`, MEM `10%`, DISK `80%` 초과 시 `[WARNING]`을 출력하도록 구현하였다.
+13. 수집 결과는 `/var/log/agent-app/monitor.log`에 `[YYYY-MM-DD HH:MM:SS] PID:... CPU:..% MEM:..% DISK_USED:..%` 형식으로 누적 기록하도록 하였다.
+14. `$AGENT_HOME/bin` 디렉터리를 생성하였다.
+15. `monitor.sh`를 `$AGENT_HOME/bin/monitor.sh`에 설치하였다.
+16. 소유자는 `agent-dev`, 그룹은 `agent-core`, 권한은 `750`으로 설정하였다.
+17. `agent-admin`이 `agent-core`에 포함되어 있으므로 cron 실행 계정 기준에서도 실행 가능한지 확인하였다.
+18. `agent-admin` 계정으로 `monitor.sh`를 직접 실행하여 Health Check, 자원 수집, 로그 기록이 정상 동작하는지 확인하였다.
+19. `tail -n 5 /var/log/agent-app/monitor.log`로 로그가 누적되는 것을 확인하였다.
+20. logrotate 설정 파일 `config/agent-app-monitor.logrotate`를 작성하였다.
+21. 해당 설정을 `/etc/logrotate.d/agent-app-monitor`에 배포하였다.
+22. `size 10M`, `rotate 10`, `copytruncate` 설정으로 `monitor.log`가 10MB를 넘으면 최대 10개까지 보관되도록 하였다.
+23. `monitor.sh`를 반복 실행한 뒤 같은 로그 포맷의 샘플 라인을 추가하여 `monitor.log`를 10MB 이상으로 크게 만들었다.
+24. `logrotate -v /etc/logrotate.d/agent-app-monitor`를 실행하여 `monitor.log.1`로 회전되고 기존 `monitor.log`가 비워지는 것을 확인하였다.
+
+#### 4.4.2 핵심 내용
+
+이번 스크립트에서 가장 핵심이라고 생각한 부분은 Health Check와 경고 항목을 분리한 것이다. 프로세스와 포트는 앱이 정상 서비스 중인지 판단하는 필수 조건이므로 실패하면 `exit 1`로 종료하게 하였고, 방화벽 상태나 CPU/MEM/DISK 임계값은 운영자가 참고해야 하는 상태 정보이므로 `[WARNING]`만 출력하고 계속 로그를 남기도록 하였다.
+
+#### 4.4.3 확인 결과
+
+- 파일 경로: `/home/agent-admin/agent-app/bin/monitor.sh`
+- 소유자/그룹: `agent-dev:agent-core`
+- 권한: `750` (`rwxr-x---`)
+- cron 실행 예정 계정: `agent-admin`
+- `agent-admin` 실행 권한: 확인 완료
+- 프로세스 Health Check: `agent-app` 확인 완료
+- 포트 Health Check: `15034` LISTEN 확인 완료
+- 방화벽 상태 점검: UFW `[OK]`
+- 자원 수집: CPU, MEM, DISK_USED 출력 확인
+- 로그 파일: `/var/log/agent-app/monitor.log`
+- 로그 포맷: `[YYYY-MM-DD HH:MM:SS] PID:... CPU:..% MEM:..% DISK_USED:..%`
+- 로그 용량 관리: logrotate로 `10MB`, `10개` 보관 설정 및 회전 확인
+
+#### 4.4.4 로그 파일 용량 관리
+
+로그 용량 관리는 스크립트 안에서 직접 구현하지 않고, 리눅스에서 일반적으로 사용하는 `logrotate`를 사용하였다. 설정 파일에는 `size 10M`과 `rotate 10`을 넣어 `monitor.log`가 10MB 이상이면 회전하고 최대 10개 파일만 유지하도록 하였다. 실제 검증에서는 `monitor.sh`를 반복 실행한 뒤 로그 파일을 10MB 이상으로 크게 만들고, `logrotate -v` 실행 결과 `monitor.log.1`이 생성되고 기존 `monitor.log`가 다시 작아지는 것을 확인하였다.
+
+#### 4.4.5 증거 자료
+
+`monitor.sh` 파일 위치, 소유자, 그룹, 권한 및 주요 코드 확인:
+
+![monitor.sh 파일 정책 확인](screenshots/12_monitor_file_policy_check.png)
+
+`monitor.sh` 실행 결과 및 `monitor.log` 누적 확인:
+
+![monitor.sh 실행 결과 확인](screenshots/13_monitor_execution_check.png)
+
+logrotate 설정, 10MB 초과 로그 생성, 회전 결과 확인:
+
+![monitor.log logrotate 확인](screenshots/14_monitor_logrotate_check.png)
+
+원문 증거 로그:
+
+- `evidence/12_monitor_file_policy_check.txt`
+- `evidence/13_monitor_execution_check.txt`
+- `evidence/14_monitor_logrotate_check.txt`

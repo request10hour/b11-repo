@@ -1,0 +1,8 @@
+/var/log/agent-app/monitor.log {
+    size 10M
+    rotate 10
+    su agent-admin agent-core
+    missingok
+    notifempty
+    copytruncate
+}

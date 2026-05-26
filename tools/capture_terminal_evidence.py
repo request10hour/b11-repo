@@ -522,6 +522,119 @@ GROUPS = [
             ),
         ],
     ),
+    (
+        "12_monitor_file_policy_check",
+        [
+            (
+                "orb -m ubuntu-b11 sudo ls -ld /home/agent-admin/agent-app/bin /home/agent-admin/agent-app/bin/monitor.sh",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "ls",
+                    "-ld",
+                    "/home/agent-admin/agent-app/bin",
+                    "/home/agent-admin/agent-app/bin/monitor.sh",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin test -x /home/agent-admin/agent-app/bin/monitor.sh && echo 'agent-admin can execute monitor.sh'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "bash",
+                    "-lc",
+                    "sudo -u agent-admin test -x /home/agent-admin/agent-app/bin/monitor.sh && echo 'agent-admin can execute monitor.sh'",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo sed -n '1,45p' /home/agent-admin/agent-app/bin/monitor.sh",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "sed",
+                    "-n",
+                    "1,45p",
+                    "/home/agent-admin/agent-app/bin/monitor.sh",
+                ],
+            ),
+        ],
+    ),
+    (
+        "13_monitor_execution_check",
+        [
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin bash -lc '/home/agent-admin/agent-app/bin/monitor.sh'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "-u",
+                    "agent-admin",
+                    "bash",
+                    "-lc",
+                    "/home/agent-admin/agent-app/bin/monitor.sh",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo tail -n 5 /var/log/agent-app/monitor.log",
+                ["orb", "-m", "ubuntu-b11", "sudo", "tail", "-n", "5", "/var/log/agent-app/monitor.log"],
+            ),
+        ],
+    ),
+    (
+        "14_monitor_logrotate_check",
+        [
+            (
+                "orb -m ubuntu-b11 sudo cat /etc/logrotate.d/agent-app-monitor",
+                ["orb", "-m", "ubuntu-b11", "sudo", "cat", "/etc/logrotate.d/agent-app-monitor"],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'for i in 1 2; do /home/agent-admin/agent-app/bin/monitor.sh >/dev/null; done; last=$(tail -n 1 \"$AGENT_LOG_DIR/monitor.log\"); yes \"$last\" | head -n 180000 >> \"$AGENT_LOG_DIR/monitor.log\"; ls -lh \"$AGENT_LOG_DIR\"/monitor.log*'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "-u",
+                    "agent-admin",
+                    "bash",
+                    "-lc",
+                    'for i in 1 2; do /home/agent-admin/agent-app/bin/monitor.sh >/dev/null; done; last=$(tail -n 1 "$AGENT_LOG_DIR/monitor.log"); yes "$last" | head -n 180000 >> "$AGENT_LOG_DIR/monitor.log"; ls -lh "$AGENT_LOG_DIR"/monitor.log*',
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 bash -lc \"sudo logrotate -v /etc/logrotate.d/agent-app-monitor 2>&1 | grep -E 'rotating pattern|log needs rotating|copying|truncating'\"",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "bash",
+                    "-lc",
+                    "sudo logrotate -v /etc/logrotate.d/agent-app-monitor 2>&1 | grep -E 'rotating pattern|log needs rotating|copying|truncating'",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin bash -lc '/home/agent-admin/agent-app/bin/monitor.sh >/dev/null; ls -lh \"$AGENT_LOG_DIR\"/monitor.log*'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "-u",
+                    "agent-admin",
+                    "bash",
+                    "-lc",
+                    '/home/agent-admin/agent-app/bin/monitor.sh >/dev/null; ls -lh "$AGENT_LOG_DIR"/monitor.log*',
+                ],
+            ),
+        ],
+    ),
 ]
 
 

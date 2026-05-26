@@ -1,0 +1,24 @@
+$ orb -m ubuntu-b11 sudo cat /etc/logrotate.d/agent-app-monitor
+/var/log/agent-app/monitor.log {
+    size 10M
+    rotate 10
+    su agent-admin agent-core
+    missingok
+    notifempty
+    copytruncate
+}
+
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'for i in 1 2; do /home/agent-admin/agent-app/bin/monitor.sh >/dev/null; done; last=$(tail -n 1 "$AGENT_LOG_DIR/monitor.log"); yes "$last" | head -n 180000 >> "$AGENT_LOG_DIR/monitor.log"; ls -lh "$AGENT_LOG_DIR"/monitor.log*'
+-rw-rw---- 1 agent-admin agent-core 11M May 26 09:20 /var/log/agent-app/monitor.log
+-rw-rw---- 1 agent-admin agent-core 11M May 26 09:18 /var/log/agent-app/monitor.log.1
+
+$ orb -m ubuntu-b11 bash -lc "sudo logrotate -v /etc/logrotate.d/agent-app-monitor 2>&1 | grep -E 'rotating pattern|log needs rotating|copying|truncating'"
+rotating pattern: /var/log/agent-app/monitor.log  10485760 bytes (10 rotations)
+  log needs rotating
+copying /var/log/agent-app/monitor.log to /var/log/agent-app/monitor.log.1
+truncating /var/log/agent-app/monitor.log
+
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc '/home/agent-admin/agent-app/bin/monitor.sh >/dev/null; ls -lh "$AGENT_LOG_DIR"/monitor.log*'
+-rw-rw---- 1 agent-admin agent-core  62 May 26 09:20 /var/log/agent-app/monitor.log
+-rw-rw---- 1 agent-admin agent-core 11M May 26 09:20 /var/log/agent-app/monitor.log.1
+-rw-rw---- 1 agent-admin agent-core 11M May 26 09:18 /var/log/agent-app/monitor.log.2
