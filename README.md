@@ -490,3 +490,47 @@ logrotate 설정, 10MB 초과 로그 생성, 회전 결과 확인:
 - `evidence/12_monitor_file_policy_check.txt`
 - `evidence/13_monitor_execution_check.txt`
 - `evidence/14_monitor_logrotate_check.txt`
+
+### 4.5 자동 실행(cron) 설정
+
+#### 4.5.1 수행 내역
+
+1. `command -v cron`으로 cron 데몬 실행 파일이 있는지 확인하였다.
+2. `command -v crontab`으로 crontab 명령이 있는지 확인하였다.
+3. `systemctl is-active cron`으로 cron 서비스가 실행 중인지 확인하였다.
+4. `systemctl is-enabled cron`으로 cron 서비스가 부팅 시 자동 실행되도록 설정되어 있는지 확인하였다.
+5. `sudo -u agent-admin crontab -l`로 `agent-admin` 계정의 기존 crontab을 확인하였다.
+6. 기존에는 `agent-admin` 계정에 등록된 crontab이 없는 것을 확인하였다.
+7. `agent-admin` 계정의 crontab에 `* * * * * /home/agent-admin/agent-app/bin/monitor.sh >/dev/null 2>&1`을 등록하였다.
+8. `sudo -u agent-admin crontab -l`로 매분 실행 규칙이 등록되었는지 확인하였다.
+9. 등록 직후 `/var/log/agent-app/monitor.log`의 줄 수와 마지막 줄을 확인하였다.
+10. 1분 이상 기다린 뒤 `/var/log/agent-app/monitor.log`의 줄 수가 증가했는지 확인하였다.
+11. `tail -n 5 /var/log/agent-app/monitor.log`로 `09:25`, `09:26`, `09:27`처럼 분 단위 로그가 자동 누적되는 것을 확인하였다.
+
+#### 4.5.2 cron 문법
+
+cron은 정해진 시간마다 명령을 자동 실행하는 리눅스 작업 예약 기능이다. crontab 한 줄은 보통 `분 시 일 월 요일 명령어` 순서로 작성한다. 이번에 사용한 `* * * * *`는 다섯 자리 모두 `*`이므로 “매분, 매시간, 매일, 매월, 모든 요일”에 실행한다는 뜻이다. 뒤의 `/home/agent-admin/agent-app/bin/monitor.sh >/dev/null 2>&1`은 `monitor.sh`를 실행하되, cron 실행 출력은 따로 화면에 남기지 않도록 버리는 설정이다.
+
+#### 4.5.3 확인 결과
+
+- cron 서비스 상태: `active`
+- cron 자동 시작 상태: `enabled`
+- cron 실행 계정: `agent-admin`
+- 등록한 crontab:
+  `* * * * * /home/agent-admin/agent-app/bin/monitor.sh >/dev/null 2>&1`
+- 실행 주기: 매분
+- 자동 실행 결과: `monitor.log`에 새 라인 자동 누적 확인
+- 확인된 자동 로그 예시:
+  - `[2026-05-26 09:25:02] ...`
+  - `[2026-05-26 09:26:02] ...`
+  - `[2026-05-26 09:27:02] ...`
+
+#### 4.5.4 증거 자료
+
+cron 서비스 상태, `agent-admin` crontab 등록, `monitor.log` 자동 누적 확인:
+
+![cron 자동 실행 확인](screenshots/15_cron_auto_execution_check.png)
+
+원문 증거 로그:
+
+- `evidence/15_cron_auto_execution_check.txt`

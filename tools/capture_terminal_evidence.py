@@ -1,5 +1,6 @@
 from pathlib import Path
 import subprocess
+import sys
 import textwrap
 
 from PIL import Image, ImageDraw, ImageFont
@@ -635,6 +636,38 @@ GROUPS = [
             ),
         ],
     ),
+    (
+        "15_cron_auto_execution_check",
+        [
+            (
+                "orb -m ubuntu-b11 bash -lc 'systemctl is-active cron; systemctl is-enabled cron'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "bash",
+                    "-lc",
+                    "systemctl is-active cron; systemctl is-enabled cron",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin crontab -l",
+                ["orb", "-m", "ubuntu-b11", "sudo", "-u", "agent-admin", "crontab", "-l"],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo bash -lc 'wc -l /var/log/agent-app/monitor.log; tail -n 5 /var/log/agent-app/monitor.log'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "bash",
+                    "-lc",
+                    "wc -l /var/log/agent-app/monitor.log; tail -n 5 /var/log/agent-app/monitor.log",
+                ],
+            ),
+        ],
+    ),
 ]
 
 
@@ -702,7 +735,10 @@ def render_terminal(text: str, path: Path) -> None:
     image.save(path)
 
 
+selected = set(sys.argv[1:])
 for name, commands in GROUPS:
+    if selected and name not in selected:
+        continue
     blocks = []
     for display, command in commands:
         blocks.append(command_to_text(display))

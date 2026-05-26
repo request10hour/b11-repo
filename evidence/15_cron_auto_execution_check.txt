@@ -1,0 +1,14 @@
+$ orb -m ubuntu-b11 bash -lc 'systemctl is-active cron; systemctl is-enabled cron'
+active
+enabled
+
+$ orb -m ubuntu-b11 sudo -u agent-admin crontab -l
+* * * * * /home/agent-admin/agent-app/bin/monitor.sh >/dev/null 2>&1
+
+$ orb -m ubuntu-b11 sudo bash -lc 'wc -l /var/log/agent-app/monitor.log; tail -n 5 /var/log/agent-app/monitor.log'
+6 /var/log/agent-app/monitor.log
+[2026-05-26 09:21:42] PID:5822 CPU:1.5% MEM:3.9% DISK_USED:1%
+[2026-05-26 09:23:30] PID:5822 CPU:0.8% MEM:5.0% DISK_USED:1%
+[2026-05-26 09:25:02] PID:5822 CPU:1.0% MEM:3.9% DISK_USED:1%
+[2026-05-26 09:26:02] PID:5822 CPU:3.0% MEM:5.0% DISK_USED:1%
+[2026-05-26 09:27:02] PID:5822 CPU:0.8% MEM:3.9% DISK_USED:1%
