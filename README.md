@@ -336,6 +336,7 @@ UFW 활성화 상태 및 허용 포트 확인:
 2. `test -f /home/agent-admin/agent-app/api_keys/t_secret.key`로 기존 키 파일 존재 여부를 확인하였다.
 3. 키 파일이 아직 존재하지 않는 것을 확인하였다.
 4. `sudo -u agent-admin bash -lc 'printf "agent_api_key_test\n" > "$AGENT_KEY_PATH"'`로 키 파일을 생성하였다.
+   > `\n`으로 마무리하여 newline을 넣은 것은 과제에서 명시한 1줄짜리 키 파일 형식을 맞추기 위해서이다.
 5. `sudo chown agent-admin:agent-core /home/agent-admin/agent-app/api_keys/t_secret.key`로 키 파일 소유자와 그룹을 지정하였다.
 6. `sudo chmod 660 /home/agent-admin/agent-app/api_keys/t_secret.key`로 소유자와 `agent-core` 그룹만 읽고 쓸 수 있게 설정하였다.
 7. `ls -l`로 키 파일의 소유자, 그룹, 권한을 확인하였다.
