@@ -357,7 +357,7 @@ GROUPS = [
                 ["orb", "-m", "ubuntu-b11", "uname", "-m"],
             ),
             (
-                "orb -m ubuntu-b11 python3 -m zipfile -l /Users/10hour0574/Downloads/pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip",
+                "orb -m ubuntu-b11 python3 -m zipfile -l /Users/10hour0574/Downloads/agent-app.zip",
                 [
                     "orb",
                     "-m",
@@ -366,7 +366,7 @@ GROUPS = [
                     "-m",
                     "zipfile",
                     "-l",
-                    "/Users/10hour0574/Downloads/pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip",
+                    "/Users/10hour0574/Downloads/agent-app.zip",
                 ],
             ),
             (

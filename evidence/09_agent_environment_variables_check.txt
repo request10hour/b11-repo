@@ -1,7 +1,7 @@
 $ orb -m ubuntu-b11 uname -m
 x86_64
 
-$ orb -m ubuntu-b11 python3 -m zipfile -l /Users/10hour0574/Downloads/pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip
+$ orb -m ubuntu-b11 python3 -m zipfile -l /Users/10hour0574/Downloads/agent-app.zip
 File Name                                             Modified             Size
 agent-app                                      2026-05-19 16:46:20      7926296
 __MACOSX/._agent-app                           2026-05-19 16:46:20          607

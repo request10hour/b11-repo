@@ -198,6 +198,7 @@ UFW 활성화 상태 및 허용 포트 확인:
 
 - `AGENT_HOME`이란? 애플리케이션 실행에 필요한 파일과 하위 디렉터리를 모아두는 기준 경로이다.
 - `install -d`란? 디렉터리를 만들면서 소유자, 그룹, 권한을 함께 지정할 수 있는 명령이다.
+  > `mkdir`로 디렉터리를 만들면 `mkdir`, `chown`, `chmod` 3단계를 거쳐야 하지만, `install -d`를 쓰면 디렉터리를 만들면서 동시에 권한을 설정할 수 있다. `-o agent-admin`은 소유자를 `agent-admin`으로, `-g agent-admin`은 소유 그룹을 `agent-admin`으로, `-m 750`은 권한을 `750`으로 지정한다.
 - 로그 디렉터리란? 애플리케이션 실행 기록이나 관제 결과를 저장하는 전용 위치이다.
 
 ##### 2.3.3 확인 결과
@@ -246,8 +247,9 @@ UFW 활성화 상태 및 허용 포트 확인:
 ##### 2.4.2 주요 개념
 
 - R/W 권한이란? 읽기(Read)와 쓰기(Write) 권한을 의미하며, 디렉터리에서는 파일 목록 확인과 파일 생성/수정에 영향을 준다.
-- ACL이란? 기본 소유자/그룹/기타 권한보다 세밀하게 접근 권한을 지정할 수 있는 리눅스 권한 기능이다.
+- ACL이란? Access Control List의 약자로, 기본 소유자/그룹/기타 권한보다 세밀하게 접근 권한을 지정할 수 있는 리눅스 권한 기능이다.
 - setgid 디렉터리란? 디렉터리 안에 새 파일을 만들 때 부모 디렉터리의 그룹을 이어받게 하는 설정이다.
+  > 예를 들어 `agent-app` 디렉터리의 그룹이 `agent-common`이면, 그 안에서 새로 만든 파일도 `agent-common` 그룹을 이어받게 된다.
 
 ##### 2.4.3 확인 결과
 
@@ -279,7 +281,7 @@ UFW 활성화 상태 및 허용 포트 확인:
 ##### 3.1.1 수행 내역
 
 1. `uname -m`으로 `ubuntu-b11`의 CPU 아키텍처가 `x86_64`인지 확인하였다.
-2. `/Users/10hour0574/Downloads/pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip`에 제공 애플리케이션 zip 파일이 있는지 확인하였다.
+2. `/Users/10hour0574/Downloads/agent-app.zip`에 제공 애플리케이션 zip 파일이 있는지 확인하였다.
 3. `python3 -m zipfile -l`로 zip 내부에 `agent-app`과 `agent-app-linux-arm64`가 들어 있는 것을 확인하였다.
 4. 현재 환경은 `x86_64`이므로 임의 앱을 만들지 않고 제공 파일 중 `agent-app`을 사용하기로 하였다.
 5. `python3 -m zipfile -e`로 제공 zip을 `/tmp/b11-agent-app-extract`에 압축 해제하였다.
@@ -304,7 +306,7 @@ UFW 활성화 상태 및 허용 포트 확인:
 
 ##### 3.1.3 확인 결과
 
-- 제공 앱 zip 사용 확인: `pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip`
+- 제공 앱 zip 사용 확인: `agent-app.zip`
 - 선택한 앱 파일: `agent-app` (`x86_64` 환경 기준)
 - 앱 배치 경로: `/home/agent-admin/agent-app/agent-app`
 - 환경 변수 등록 파일: `/etc/profile.d/agent-app.sh`
