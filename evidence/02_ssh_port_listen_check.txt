@@ -4,8 +4,6 @@ active
 $ orb -m ubuntu-b11 systemctl is-enabled ssh.service
 enabled
 
-$ orb -m ubuntu-b11 sudo ss -tulnp
-Netid State  Recv-Q Send-Q       Local Address:Port  Peer Address:PortProcess                                   
-udp   UNCONN 0      0      192.168.139.25%eth0:68         0.0.0.0:*    users:(("systemd-network",pid=175,fd=20))
+$ orb -m ubuntu-b11 sudo ss -tulnp | grep sshd
 tcp   LISTEN 0      128                0.0.0.0:20022      0.0.0.0:*    users:(("sshd",pid=3528,fd=3))           
 tcp   LISTEN 0      128                   [::]:20022         [::]:*    users:(("sshd",pid=3528,fd=4))

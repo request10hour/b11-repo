@@ -5,10 +5,10 @@ uid=1002(agent-test) gid=1002(agent-test) groups=1002(agent-test),1003(agent-com
 
 $ orb -m ubuntu-b11 sudo ls -ld /home/agent-admin /home/agent-admin/agent-app /home/agent-admin/agent-app/upload_files /home/agent-admin/agent-app/api_keys /var/log/agent-app
 drwxr-x---+ 1 agent-admin agent-admin  72 May 26 08:48 /home/agent-admin
-drwxr-s---  1 agent-admin agent-common 58 May 26 08:57 /home/agent-admin/agent-app
-drwxrws---+ 1 agent-admin agent-core   24 May 26 09:01 /home/agent-admin/agent-app/api_keys
-drwxrws---+ 1 agent-admin agent-common  0 May 26 08:58 /home/agent-admin/agent-app/upload_files
-drwxrws---+ 1 root        agent-core    0 May 26 08:58 /var/log/agent-app
+drwxr-s---  1 agent-admin agent-common 84 May 26 09:05 /home/agent-admin/agent-app
+drwxrws---+ 1 agent-admin agent-core   24 May 26 09:09 /home/agent-admin/agent-app/api_keys
+drwxrws---+ 1 agent-admin agent-common  0 May 26 09:09 /home/agent-admin/agent-app/upload_files
+drwxrws---+ 1 root        agent-core   62 May 26 09:09 /var/log/agent-app
 
 $ orb -m ubuntu-b11 sudo getfacl -p /home/agent-admin /home/agent-admin/agent-app /home/agent-admin/agent-app/upload_files /home/agent-admin/agent-app/api_keys /var/log/agent-app
 # file: /home/agent-admin

@@ -54,8 +54,8 @@ GROUPS = [
                 ["orb", "-m", "ubuntu-b11", "systemctl", "is-enabled", "ssh.service"],
             ),
             (
-                "orb -m ubuntu-b11 sudo ss -tulnp",
-                ["orb", "-m", "ubuntu-b11", "sudo", "ss", "-tulnp"],
+                "orb -m ubuntu-b11 sudo ss -tulnp | grep sshd",
+                ["orb", "-m", "ubuntu-b11", "bash", "-lc", "sudo ss -tulnp | grep sshd"],
             ),
         ],
     ),
@@ -481,6 +481,44 @@ GROUPS = [
                     "-lc",
                     'test "$(cat "$AGENT_KEY_PATH")" = "agent_api_key_test" && echo "key content: OK"',
                 ],
+            ),
+        ],
+    ),
+    (
+        "11_agent_run_success_check",
+        [
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'sed -n \"1,14p\" \"$AGENT_LOG_DIR/agent-app-boot.log\"'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "-u",
+                    "agent-admin",
+                    "bash",
+                    "-lc",
+                    'sed -n "1,14p" "$AGENT_LOG_DIR/agent-app-boot.log"',
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 pgrep -a -u agent-admin -f agent-app",
+                ["orb", "-m", "ubuntu-b11", "pgrep", "-a", "-u", "agent-admin", "-f", "agent-app"],
+            ),
+            (
+                "orb -m ubuntu-b11 bash -lc \"ps -o user:20,pid,ppid,comm,args -u agent-admin | grep '[a]gent-app'\"",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "bash",
+                    "-lc",
+                    "ps -o user:20,pid,ppid,comm,args -u agent-admin | grep '[a]gent-app'",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo ss -tulnp | grep ':15034'",
+                ["orb", "-m", "ubuntu-b11", "bash", "-lc", "sudo ss -tulnp | grep ':15034'"],
             ),
         ],
     ),

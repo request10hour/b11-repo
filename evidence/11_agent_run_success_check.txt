@@ -1,0 +1,28 @@
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'sed -n "1,14p" "$AGENT_LOG_DIR/agent-app-boot.log"'
+>>> Starting Agent Boot Sequence...
+[1/5] Checking User Account               [OK]
+ ... Running as service user 'agent-admin' (uid=1000)
+[2/5] Verifying Environment Variables     [OK]
+ ... All required Envs correct
+[3/5] Checking Required Files             [OK]
+ ... Verified 'secret.key' with correct key string.
+[4/5] Checking Port Availability          [OK]
+ ... Port 15034 is available.
+[5/5] Verifying Log Permission            [OK]
+ ... Log directory is writable: /var/log/agent-app
+------------------------------------------------------------
+All Boot Checks Passed!
+Agent READY
+
+$ orb -m ubuntu-b11 pgrep -a -u agent-admin -f agent-app
+5820 bash -lc cd "$AGENT_HOME" && nohup "$AGENT_HOME/agent-app" > "$AGENT_LOG_DIR/agent-app-boot.log" 2>&1 & echo $! > "$AGENT_HOME/agent-app.pid"
+5821 /home/agent-admin/agent-app/agent-app
+5822 /home/agent-admin/agent-app/agent-app
+
+$ orb -m ubuntu-b11 bash -lc "ps -o user:20,pid,ppid,comm,args -u agent-admin | grep '[a]gent-app'"
+agent-admin             5820       1 bash            bash -lc cd "$AGENT_HOME" && nohup "$AGENT_HOME/agent-app" > "$AGENT_LOG_DIR/agent-app-boot.log" 2>&1 & echo $! > "$AGENT_HOME/agent-app.pid"
+agent-admin             5821    5820 agent-app       /home/agent-admin/agent-app/agent-app
+agent-admin             5822    5821 agent-app       /home/agent-admin/agent-app/agent-app
+
+$ orb -m ubuntu-b11 sudo ss -tulnp | grep ':15034'
+tcp   LISTEN 0      1                  0.0.0.0:15034      0.0.0.0:*    users:(("agent-app",pid=5822,fd=4))

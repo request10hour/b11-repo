@@ -33,7 +33,9 @@ total 4
 total 0
 
 /var/log/agent-app:
-total 0
+total 136
+-rw-rw---- 1 agent-admin agent-core 68468 May 26 09:11 agent-app-boot.log
+-rw-rw---- 1 agent-admin agent-core 67882 May 26 09:11 agent_app.log
 
 $ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'test -x "$AGENT_HOME/agent-app" && echo "provided app executable: OK"'
 provided app executable: OK

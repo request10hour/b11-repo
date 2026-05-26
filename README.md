@@ -372,3 +372,49 @@ UFW 활성화 상태 및 허용 포트 확인:
 원문 증거 로그:
 
 - `evidence/10_key_file_check.txt`
+
+#### 4.3.3 앱 실행 및 성공 기준
+
+##### 4.3.3.1 수행 내역
+
+1. `pgrep -a -u agent-admin -f agent-app`로 기존 앱 프로세스가 실행 중인지 확인하였다.
+2. `ss -tulnp | grep ':15034'`로 앱 포트가 이미 사용 중인지 확인하였다.
+3. 실행 중인 앱 프로세스와 `15034` 리슨 포트가 없는 것을 확인하였다.
+4. `sudo -u agent-admin bash -lc 'ls -l "$AGENT_HOME/agent-app"; env | grep ^AGENT_ | sort'`로 실행 파일과 환경 변수를 다시 확인하였다.
+5. `agent-admin` 일반 계정으로 `AGENT_HOME` 디렉터리에서 제공 앱을 실행하였다.
+6. 앱 실행 출력은 `/var/log/agent-app/agent-app-boot.log`에 저장하였다.
+7. `agent-app.pid` 파일을 생성하여 실행 중인 앱 PID를 확인할 수 있게 하였다.
+8. `sed -n "1,14p" "$AGENT_LOG_DIR/agent-app-boot.log"`로 Boot Sequence 출력 내용을 확인하였다.
+9. Boot Sequence 5단계가 모두 `[OK]`인지 확인하였다.
+10. 마지막에 `All Boot Checks Passed!`와 `Agent READY`가 출력되는 것을 확인하였다.
+11. `pgrep -a -u agent-admin -f agent-app`로 앱이 `agent-admin` 계정에서 실행 중인지 확인하였다.
+12. `ps -o user:20,pid,ppid,comm,args -u agent-admin`으로 프로세스 실행 사용자가 root가 아닌 `agent-admin`임을 확인하였다.
+13. `sudo ss -tulnp | grep ':15034'`로 앱이 `0.0.0.0:15034`에서 LISTEN 상태인지 확인하였다.
+14. 이후 `monitor.sh` 검증 단계에서 사용할 수 있도록 앱을 종료하지 않고 실행 상태로 유지하였다.
+
+##### 4.3.3.2 주요 개념
+
+- Boot Sequence란? 앱이 실행되기 전에 계정, 환경 변수, 파일, 포트, 로그 권한을 순서대로 점검하는 초기 확인 과정이다.
+- LISTEN 상태란? 프로세스가 특정 포트에서 외부 접속을 받을 준비가 된 상태이다.
+- 일반 계정 실행이란? root가 아닌 서비스용 사용자로 앱을 실행하여 권한 범위를 줄이는 운영 방식이다.
+
+##### 4.3.3.3 확인 결과
+
+- 실행 계정: `agent-admin`
+- root 실행 여부: root가 아닌 일반 계정 실행 확인
+- Boot Sequence 결과: 5단계 모두 `[OK]`
+- 최종 준비 메시지: `Agent READY`
+- 앱 리슨 주소: `0.0.0.0:15034`
+- 실행 파일: `/home/agent-admin/agent-app/agent-app`
+- 실행 로그: `/var/log/agent-app/agent-app-boot.log`
+- 앱 종료는 foreground 실행 시 `Ctrl+C`로 가능하지만, 이번 단계에서는 다음 관제 스크립트 검증을 위해 백그라운드 실행 상태를 유지하였다.
+
+##### 4.3.3.4 증거 자료
+
+Boot Sequence, 일반 계정 실행, `15034` 포트 LISTEN 확인:
+
+![앱 실행 성공 확인](screenshots/11_agent_run_success_check.png)
+
+원문 증거 로그:
+
+- `evidence/11_agent_run_success_check.txt`
