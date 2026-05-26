@@ -1,0 +1,38 @@
+$ orb -m ubuntu-b11 uname -m
+x86_64
+
+$ orb -m ubuntu-b11 python3 -m zipfile -l /Users/10hour0574/Downloads/pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip
+File Name                                             Modified             Size
+agent-app                                      2026-05-19 16:46:20      7926296
+__MACOSX/._agent-app                           2026-05-19 16:46:20          607
+agent-app-linux-arm64                          2026-05-18 17:06:12      7537848
+__MACOSX/._agent-app-linux-arm64               2026-05-18 17:06:12          219
+
+$ orb -m ubuntu-b11 sudo cat /etc/profile.d/agent-app.sh
+export AGENT_HOME=/home/agent-admin/agent-app
+export AGENT_PORT=15034
+export AGENT_UPLOAD_DIR=$AGENT_HOME/upload_files
+export AGENT_KEY_PATH=$AGENT_HOME/api_keys/t_secret.key
+export AGENT_LOG_DIR=/var/log/agent-app
+
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'printf "AGENT_HOME=%s\nAGENT_PORT=%s\nAGENT_UPLOAD_DIR=%s\nAGENT_KEY_PATH=%s\nAGENT_LOG_DIR=%s\n" "$AGENT_HOME" "$AGENT_PORT" "$AGENT_UPLOAD_DIR" "$AGENT_KEY_PATH" "$AGENT_LOG_DIR"'
+AGENT_HOME=/home/agent-admin/agent-app
+AGENT_PORT=15034
+AGENT_UPLOAD_DIR=/home/agent-admin/agent-app/upload_files
+AGENT_KEY_PATH=/home/agent-admin/agent-app/api_keys/t_secret.key
+AGENT_LOG_DIR=/var/log/agent-app
+
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'ls -l "$AGENT_HOME/agent-app" "$AGENT_UPLOAD_DIR" "$(dirname "$AGENT_KEY_PATH")" "$AGENT_LOG_DIR"'
+-rwxr-x---  1 agent-admin agent-core   7926296 May 26 08:57 /home/agent-admin/agent-app/agent-app
+
+/home/agent-admin/agent-app/api_keys:
+total 0
+
+/home/agent-admin/agent-app/upload_files:
+total 0
+
+/var/log/agent-app:
+total 0
+
+$ orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'test -x "$AGENT_HOME/agent-app" && echo "provided app executable: OK"'
+provided app executable: OK

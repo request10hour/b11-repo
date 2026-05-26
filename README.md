@@ -278,3 +278,57 @@ UFW 활성화 상태 및 허용 포트 확인:
 
 - `evidence/07_access_permission_metadata_check.txt`
 - `evidence/08_access_permission_write_tests.txt`
+
+### 4.3 애플리케이션 실행 환경 구성
+
+#### 4.3.1 환경 변수
+
+##### 4.3.1.1 수행 내역
+
+1. `uname -m`으로 `ubuntu-b11`의 CPU 아키텍처가 `x86_64`인지 확인하였다.
+2. `/Users/10hour0574/Downloads/pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip`에 제공 애플리케이션 zip 파일이 있는지 확인하였다.
+3. `python3 -m zipfile -l`로 zip 내부에 `agent-app`과 `agent-app-linux-arm64`가 들어 있는 것을 확인하였다.
+4. 현재 환경은 `x86_64`이므로 임의 앱을 만들지 않고 제공 파일 중 `agent-app`을 사용하기로 하였다.
+5. `python3 -m zipfile -e`로 제공 zip을 `/tmp/b11-agent-app-extract`에 압축 해제하였다.
+6. `sudo install -o agent-admin -g agent-core -m 750 /tmp/b11-agent-app-extract/agent-app /home/agent-admin/agent-app/agent-app`으로 제공 앱을 `AGENT_HOME` 아래에 배치하였다.
+7. 제출 저장소에 `config/agent-app-env.sh` 파일을 작성하였다.
+8. 환경 변수 파일에 `AGENT_HOME=/home/agent-admin/agent-app`을 등록하였다.
+9. 환경 변수 파일에 `AGENT_PORT=15034`를 등록하였다.
+10. 환경 변수 파일에 `AGENT_UPLOAD_DIR=$AGENT_HOME/upload_files`를 등록하였다.
+11. 환경 변수 파일에 `AGENT_KEY_PATH=$AGENT_HOME/api_keys/t_secret.key`를 등록하였다.
+12. 환경 변수 파일에 `AGENT_LOG_DIR=/var/log/agent-app`를 등록하였다.
+13. `sudo install -o root -g root -m 644 config/agent-app-env.sh /etc/profile.d/agent-app.sh`로 시스템 로그인 셸에서 환경 변수가 자동 등록되도록 배포하였다.
+14. `sudo cat /etc/profile.d/agent-app.sh`로 시스템에 등록된 환경 변수 파일 내용을 확인하였다.
+15. `sudo -u agent-admin bash -lc ...`로 `agent-admin` 로그인 셸에서 환경 변수들이 실제 값으로 로드되는 것을 확인하였다.
+16. `ls -l`로 제공 앱 파일, 업로드 디렉터리, 키 디렉터리, 로그 디렉터리가 환경 변수 경로와 맞는지 확인하였다.
+17. `test -x "$AGENT_HOME/agent-app"`로 제공 앱 파일이 실행 가능 상태인지 확인하였다.
+
+##### 4.3.1.2 주요 개념
+
+- 환경 변수란? 프로그램 실행 시 필요한 경로, 포트, 설정값을 코드 밖에서 전달하기 위한 값이다.
+- `/etc/profile.d`란? 로그인 셸이 시작될 때 공통 환경 설정 스크립트를 읽는 디렉터리이다.
+- `AGENT_HOME`이란? 앱 실행 파일과 관련 디렉터리를 찾기 위한 기준 경로이다.
+
+##### 4.3.1.3 확인 결과
+
+- 제공 앱 zip 사용 확인: `pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip`
+- 선택한 앱 파일: `agent-app` (`x86_64` 환경 기준)
+- 앱 배치 경로: `/home/agent-admin/agent-app/agent-app`
+- 환경 변수 등록 파일: `/etc/profile.d/agent-app.sh`
+- `AGENT_HOME`: `/home/agent-admin/agent-app`
+- `AGENT_PORT`: `15034`
+- `AGENT_UPLOAD_DIR`: `/home/agent-admin/agent-app/upload_files`
+- `AGENT_KEY_PATH`: `/home/agent-admin/agent-app/api_keys/t_secret.key`
+- `AGENT_LOG_DIR`: `/var/log/agent-app`
+- `agent-admin` 로그인 셸에서 환경 변수가 정상적으로 로드됨
+- 키 파일 자체는 다음 단계에서 생성할 예정이며, 이번 단계에서는 키 파일 경로 환경 변수를 먼저 고정함
+
+##### 4.3.1.4 증거 자료
+
+제공 앱 zip 확인, 환경 변수 등록 파일, `agent-admin` 계정의 환경 변수 로드 확인:
+
+![애플리케이션 환경 변수 확인](screenshots/09_agent_environment_variables_check.png)
+
+원문 증거 로그:
+
+- `evidence/09_agent_environment_variables_check.txt`

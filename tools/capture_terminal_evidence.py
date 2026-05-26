@@ -348,6 +348,74 @@ GROUPS = [
             ),
         ],
     ),
+    (
+        "09_agent_environment_variables_check",
+        [
+            (
+                "orb -m ubuntu-b11 uname -m",
+                ["orb", "-m", "ubuntu-b11", "uname", "-m"],
+            ),
+            (
+                "orb -m ubuntu-b11 python3 -m zipfile -l /Users/10hour0574/Downloads/pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "python3",
+                    "-m",
+                    "zipfile",
+                    "-l",
+                    "/Users/10hour0574/Downloads/pjt7ec757e6-0e57-48e9-9805-e1587f441508_agent-app.zip",
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo cat /etc/profile.d/agent-app.sh",
+                ["orb", "-m", "ubuntu-b11", "sudo", "cat", "/etc/profile.d/agent-app.sh"],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'printf \"AGENT_HOME=%s\\nAGENT_PORT=%s\\nAGENT_UPLOAD_DIR=%s\\nAGENT_KEY_PATH=%s\\nAGENT_LOG_DIR=%s\\n\" \"$AGENT_HOME\" \"$AGENT_PORT\" \"$AGENT_UPLOAD_DIR\" \"$AGENT_KEY_PATH\" \"$AGENT_LOG_DIR\"'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "-u",
+                    "agent-admin",
+                    "bash",
+                    "-lc",
+                    'printf "AGENT_HOME=%s\\nAGENT_PORT=%s\\nAGENT_UPLOAD_DIR=%s\\nAGENT_KEY_PATH=%s\\nAGENT_LOG_DIR=%s\\n" "$AGENT_HOME" "$AGENT_PORT" "$AGENT_UPLOAD_DIR" "$AGENT_KEY_PATH" "$AGENT_LOG_DIR"',
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'ls -l \"$AGENT_HOME/agent-app\" \"$AGENT_UPLOAD_DIR\" \"$(dirname \"$AGENT_KEY_PATH\")\" \"$AGENT_LOG_DIR\"'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "-u",
+                    "agent-admin",
+                    "bash",
+                    "-lc",
+                    'ls -l "$AGENT_HOME/agent-app" "$AGENT_UPLOAD_DIR" "$(dirname "$AGENT_KEY_PATH")" "$AGENT_LOG_DIR"',
+                ],
+            ),
+            (
+                "orb -m ubuntu-b11 sudo -u agent-admin bash -lc 'test -x \"$AGENT_HOME/agent-app\" && echo \"provided app executable: OK\"'",
+                [
+                    "orb",
+                    "-m",
+                    "ubuntu-b11",
+                    "sudo",
+                    "-u",
+                    "agent-admin",
+                    "bash",
+                    "-lc",
+                    'test -x "$AGENT_HOME/agent-app" && echo "provided app executable: OK"',
+                ],
+            ),
+        ],
+    ),
 ]
 
 
