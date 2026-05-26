@@ -469,6 +469,7 @@ Boot Sequence, 일반 계정 실행, `15034` 포트 LISTEN 확인:
 #### 4.4 로그 파일 용량 관리
 
 로그 용량 관리는 스크립트 안에서 직접 구현하지 않고, 리눅스에서 일반적으로 사용하는 `logrotate`를 사용하였다. 설정 파일에는 `size 10M`과 `rotate 10`을 넣어 `monitor.log`가 10MB 이상이면 회전하고 최대 10개 파일만 유지하도록 하였다. 실제 검증에서는 `monitor.sh`를 반복 실행한 뒤 로그 파일을 10MB 이상으로 크게 만들고, `logrotate -v` 실행 결과 `monitor.log.1`이 생성되고 기존 `monitor.log`가 다시 작아지는 것을 확인하였다.
+> `size 10M`은 로그 파일이 10MB 이상이면 회전 대상으로 보는 설정이고, `rotate 10`은 회전된 로그를 최대 10개까지 보관하는 설정이다. `su agent-admin agent-core`는 `agent-admin:agent-core` 권한으로 로그 회전을 수행하게 하며, `missingok`는 로그 파일이 없어도 오류로 처리하지 않고, `notifempty`는 빈 로그 파일은 회전하지 않게 한다. `copytruncate`는 실행 중인 프로세스를 재시작하지 않고 기존 로그 파일을 복사한 뒤 원본을 비우는 방식이다.
 
 #### 4.5 증거 자료
 
