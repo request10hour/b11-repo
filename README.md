@@ -473,10 +473,6 @@ Boot Sequence, 일반 계정 실행, `15034` 포트 LISTEN 확인:
 
 #### 4.5 증거 자료
 
-`monitor.sh` 파일 위치, 소유자, 그룹, 권한 및 주요 코드 확인:
-
-![monitor.sh 파일 정책 확인](screenshots/12_monitor_file_policy_check.png)
-
 `monitor.sh` 실행 결과 및 `monitor.log` 누적 확인:
 
 ![monitor.sh 실행 결과 확인](screenshots/13_monitor_execution_check.png)
@@ -487,7 +483,6 @@ logrotate 설정, 10MB 초과 로그 생성, 회전 결과 확인:
 
 원문 증거 로그:
 
-- `evidence/12_monitor_file_policy_check.txt`
 - `evidence/13_monitor_execution_check.txt`
 - `evidence/14_monitor_logrotate_check.txt`
 
