@@ -58,18 +58,16 @@ SSH 서비스 상태 및 포트 리슨 확인:
 
 ##### 1.2.1 수행 내역
 
-1. `ubuntu-b11` 환경에서 `ufw`와 `firewall-cmd` 설치 여부를 확인하였다.
-2. 두 도구가 모두 설치되어 있지 않아, 과제 확인 방법이 간단한 UFW를 선택하였다.
-3. `sudo apt-get install -y ufw`로 UFW를 설치하였다.
-4. `sudo ufw default deny incoming`으로 외부에서 들어오는 기본 연결을 차단하였다.
-5. `sudo ufw default allow outgoing`으로 서버에서 외부로 나가는 연결은 허용하였다.
-6. `sudo ufw allow 20022/tcp`로 SSH 접속용 포트만 허용하였다.
-7. `sudo ufw allow 15034/tcp`로 애플리케이션 실행 포트만 허용하였다.
-8. `sudo ufw --force enable`로 방화벽을 활성화하고 부팅 시에도 적용되도록 하였다.
+1. `sudo apt-get install -y ufw`로 UFW를 설치하였다.
+2. `sudo ufw default deny incoming`으로 외부에서 들어오는 기본 연결을 차단하였다.
+3. `sudo ufw default allow outgoing`으로 서버에서 외부로 나가는 연결은 허용하였다.
+4. `sudo ufw allow 20022/tcp`로 SSH 접속용 포트만 허용하였다.
+5. `sudo ufw allow 15034/tcp`로 애플리케이션 실행 포트만 허용하였다.
+6. `sudo ufw --force enable`로 방화벽을 활성화하고 부팅 시에도 적용되도록 하였다.
    > `--force`를 붙이지 않으면 `Command may disrupt existing ssh connections. Proceed with operation (y|n)?` 확인 질문이 나온다.
-9. `sudo ufw status verbose`로 방화벽 상태가 `active`인지 확인하였다.
-10. 같은 출력에서 기본 정책이 `deny (incoming)`이고 허용 포트가 `20022/tcp`, `15034/tcp`만 있는지 확인하였다.
-11. `sudo ufw status numbered`로 등록된 인바운드 허용 규칙을 번호 목록으로 다시 확인하였다.
+7. `sudo ufw status verbose`로 방화벽 상태가 `active`인지 확인하였다.
+8. 같은 출력에서 기본 정책이 `deny (incoming)`이고 허용 포트가 `20022/tcp`, `15034/tcp`만 있는지 확인하였다.
+9. `sudo ufw status numbered`로 등록된 인바운드 허용 규칙을 번호 목록으로 다시 확인하였다.
     > 번호로 규칙을 삭제하거나 관리하기 쉽게 해준다. 예: `sudo ufw delete 1`
 
 ##### 1.2.2 주요 개념
