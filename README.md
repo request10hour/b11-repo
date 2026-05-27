@@ -98,16 +98,14 @@ UFW 활성화 상태 및 허용 포트 확인:
 
 ##### 2.1.1 수행 내역
 
-1. `ubuntu-b11` 환경에서 `getent passwd agent-admin`, `getent passwd agent-dev`, `getent passwd agent-test`로 기존 계정 존재 여부를 확인하였다.
-   > `getent`는 get entries의 줄임말로, 시스템 데이터베이스에서 항목을 가져온다는 의미이다. 여기서 `passwd`는 비밀번호가 아니라 사용자 계정 정보를 뜻하며, `passwd`, `group`, `hosts`, `services` 같은 데이터베이스를 조회할 수 있다.
-2. 세 계정이 아직 존재하지 않는 것을 확인하였다.
-3. `sudo useradd -m -s /bin/bash agent-admin`으로 운영/관리 및 cron 실행 담당 계정을 생성하였다.
+1. `sudo useradd -m -s /bin/bash agent-admin`으로 운영/관리 및 cron 실행 담당 계정을 생성하였다.
    > `-m`은 홈 디렉터리를 생성하는 옵션으로, 여기에서는 `/home/agent-admin`이 생성된다. `-s /bin/bash`는 로그인 shell을 `/bin/bash`로 지정하는 옵션이다.
-4. `sudo useradd -m -s /bin/bash agent-dev`로 개발/운영 및 `monitor.sh` 작성 담당 계정을 생성하였다.
-5. `sudo useradd -m -s /bin/bash agent-test`로 QA/테스트 담당 계정을 생성하였다.
-6. `id agent-admin`, `id agent-dev`, `id agent-test`로 각 계정의 UID, GID, 기본 그룹을 확인하였다.
-7. `getent passwd agent-admin agent-dev agent-test`로 세 계정의 홈 디렉터리와 로그인 shell이 등록되었는지 확인하였다.
-8. `ls -ld /home/agent-admin /home/agent-dev /home/agent-test`로 각 계정의 홈 디렉터리가 생성되었는지 확인하였다.
+2. `sudo useradd -m -s /bin/bash agent-dev`로 개발/운영 및 `monitor.sh` 작성 담당 계정을 생성하였다.
+3. `sudo useradd -m -s /bin/bash agent-test`로 QA/테스트 담당 계정을 생성하였다.
+4. `id agent-admin`, `id agent-dev`, `id agent-test`로 각 계정의 UID, GID, 기본 그룹을 확인하였다.
+5. `getent passwd agent-admin agent-dev agent-test`로 세 계정의 홈 디렉터리와 로그인 shell이 등록되었는지 확인하였다.
+   > `getent`는 get entries의 줄임말로, 시스템 데이터베이스에서 항목을 가져온다는 의미이다. 여기서 `passwd`는 비밀번호가 아니라 사용자 계정 정보를 뜻하며, `passwd`, `group`, `hosts`, `services` 같은 데이터베이스를 조회할 수 있다.
+6. `ls -ld /home/agent-admin /home/agent-dev /home/agent-test`로 각 계정의 홈 디렉터리가 생성되었는지 확인하였다.
 
 ##### 2.1.2 주요 개념
 
