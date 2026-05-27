@@ -430,8 +430,8 @@ Boot Sequence, 일반 계정 실행, `15034` 포트 LISTEN 확인:
 6. 포트가 LISTEN 상태가 아니면 `[ERROR] TCP 15034 is not LISTEN`을 출력하고 `exit 1`로 종료하도록 하였다.
 7. 방화벽 상태 점검은 UFW 설정 파일의 `ENABLED=yes`를 확인하는 방식으로 구현하였다.
 8. 방화벽이 비활성 상태이면 `[WARNING]`만 출력하고 스크립트는 계속 실행되도록 하였다.
-9. CPU 사용률은 `/proc/stat`을 두 번 읽어 전체 CPU 사용 비율을 계산하도록 구현하였다.
-10. 메모리 사용률은 `free` 명령으로 계산하였다.
+9. CPU 사용률은 `top -bn2 -d 1`의 두 번째 샘플에서 idle 값을 읽어 전체 CPU 사용 비율을 계산하도록 구현하였다.
+10. 메모리 사용률은 같은 `top` 출력의 `Mem` 요약에서 `used / total` 비율로 계산하였다.
 11. 루트 파티션 디스크 사용률은 `df /` 명령으로 수집하였다.
 12. CPU `20%`, MEM `10%`, DISK `80%` 초과 시 `[WARNING]`을 출력하도록 구현하였다.
 13. 수집 결과는 `/var/log/agent-app/monitor.log`에 `[YYYY-MM-DD HH:MM:SS] PID:... CPU:..% MEM:..% DISK_USED:..%` 형식으로 누적 기록하도록 하였다.

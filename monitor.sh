@@ -35,18 +35,41 @@ else
   FIREWALL_STATUS="[WARNING] UFW is not enabled"
 fi
 
-# /proc/stat을 두 번 샘플링하여 CPU 사용률을 계산한다.
-read -r _ u1 n1 s1 i1 w1 irq1 sirq1 steal1 _ < /proc/stat
-idle1=$((i1 + w1))
-total1=$((u1 + n1 + s1 + i1 + w1 + irq1 + sirq1 + steal1))
-sleep 1
-read -r _ u2 n2 s2 i2 w2 irq2 sirq2 steal2 _ < /proc/stat
-idle2=$((i2 + w2))
-total2=$((u2 + n2 + s2 + i2 + w2 + irq2 + sirq2 + steal2))
-CPU=$(awk -v dt=$((total2 - total1)) -v di=$((idle2 - idle1)) 'BEGIN { if (dt > 0) printf "%.1f", (dt - di) * 100 / dt; else printf "0.0" }')
+# top 배치 모드의 두 번째 샘플에서 CPU/메모리 사용률을 수집한다.
+if ! TOP_OUTPUT=$(LC_ALL=C top -bn2 -d 1 2>/dev/null); then
+  echo "[ERROR] failed to collect resource data with top"
+  exit 1
+fi
 
-# 메모리 사용률과 루트 디스크 사용률을 수집한다.
-MEM=$(free | awk '/Mem:/ { printf "%.1f", $3 * 100 / $2 }')
+CPU=$(printf "%s\n" "$TOP_OUTPUT" | awk -F'[, ]+' '
+  /^%Cpu/ {
+    for (i = 1; i <= NF; i++) {
+      if ($i == "id") {
+        idle = $(i - 1)
+        found = 1
+      }
+    }
+  }
+  END {
+    if (found) printf "%.1f", 100 - idle
+    else printf "0.0"
+  }
+')
+
+MEM=$(printf "%s\n" "$TOP_OUTPUT" | awk -F'[:, ]+' '
+  /^[KMG]iB Mem/ {
+    for (i = 1; i <= NF; i++) {
+      if ($i == "total") total = $(i - 1)
+      if ($i == "used") used = $(i - 1)
+    }
+  }
+  END {
+    if (total > 0) printf "%.1f", used * 100 / total
+    else printf "0.0"
+  }
+')
+
+# 루트 디스크 사용률을 수집한다.
 DISK_USED=$(df / | awk 'NR==2 { gsub("%", "", $5); print $5 }')
 
 # 요구된 로그 형식으로 monitor.log에 기록한다.
