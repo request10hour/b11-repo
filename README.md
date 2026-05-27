@@ -8,22 +8,20 @@
 
 ##### 1.1.1 수행 내역
 
-1. `ubuntu-b11` 환경에서 `sshd` 설치 여부를 확인하였다.
-2. `sshd`가 설치되어 있지 않아 `sudo apt-get update`를 실행하였다.
-3. `sudo apt-get install -y openssh-server`로 OpenSSH 서버를 설치하였다.
-4. 제출 저장소에 `config/99-b11-hardening.conf` 파일을 만들었다.
+1. `sudo apt-get install -y openssh-server`로 OpenSSH 서버를 설치하였다.
+2. 제출 저장소에 `config/99-b11-hardening.conf` 파일을 만들었다.
    > 파일명 앞의 `99-`는 `/etc/ssh/sshd_config.d/` 안에서 설정 파일이 이름순으로 읽히는 점을 고려하여, 이 보안 강화 설정이 뒤쪽에서 적용되도록 붙인 것이다.
-5. 해당 설정 파일에 `Port 20022`를 작성하여 SSH 접속 포트를 20022번으로 지정하였다.
-6. 같은 설정 파일에 `PermitRootLogin no`를 작성하여 Root 원격 로그인을 차단하였다.
-7. `/etc/ssh/sshd_config.d/` 디렉터리를 생성하고 설정 파일을 배포하였다.
+3. 해당 설정 파일에 `Port 20022`를 작성하여 SSH 접속 포트를 20022번으로 지정하였다.
+4. 같은 설정 파일에 `PermitRootLogin no`를 작성하여 Root 원격 로그인을 차단하였다.
+5. `/etc/ssh/sshd_config.d/` 디렉터리를 생성하고 설정 파일을 배포하였다.
    > `/etc/ssh/sshd_config`를 직접 수정하지 않아도 이 디렉터리에 `.conf` 파일을 넣으면 SSH 설정을 추가로 적용할 수 있어, 설정을 분리해 관리할 수 있다.
-8. `sudo sshd -t`로 SSH 설정 문법 오류가 없는지 확인하였다.
-9. Ubuntu 24.04 환경에서 기본 `ssh.socket`이 22번 포트를 잡고 있어 `sudo systemctl disable --now ssh.socket`으로 비활성화하였다.
-10. `sudo systemctl enable ssh.service`로 SSH 서비스를 부팅 시 자동 실행되도록 등록하였다.
-11. `sudo systemctl restart ssh.service`로 변경된 설정을 적용하였다.
-12. `sshd_config.d` 설정 파일에서 `Port 20022`, `PermitRootLogin no`가 들어간 것을 확인하였다.
-13. `sudo sshd -T`로 실제 적용된 설정도 `port 20022`, `permitrootlogin no`임을 확인하였다.
-14. `sudo ss -tulnp`로 `sshd`가 `0.0.0.0:20022`와 `[::]:20022`에서 LISTEN 상태임을 확인하였다.
+6. `sudo sshd -t`로 SSH 설정 문법 오류가 없는지 확인하였다.
+7. Ubuntu 24.04 환경에서 기본 `ssh.socket`이 22번 포트를 잡고 있어 `sudo systemctl disable --now ssh.socket`으로 비활성화하였다.
+8. `sudo systemctl enable ssh.service`로 SSH 서비스를 부팅 시 자동 실행되도록 등록하였다.
+9. `sudo systemctl restart ssh.service`로 변경된 설정을 적용하였다.
+10. `sshd_config.d` 설정 파일에서 `Port 20022`, `PermitRootLogin no`가 들어간 것을 확인하였다.
+11. `sudo sshd -T`로 실제 적용된 설정도 `port 20022`, `permitrootlogin no`임을 확인하였다.
+12. `sudo ss -tulnp`로 `sshd`가 `0.0.0.0:20022`와 `[::]:20022`에서 LISTEN 상태임을 확인하였다.
     > `ss -tulnp`의 옵션은 `-t`(TCP 소켓 표시), `-u`(UDP 소켓 표시), `-l`(접속 대기 중인 포트 표시), `-n`(포트와 주소를 숫자로 표시), `-p`(해당 포트를 사용하는 프로세스 표시)를 의미한다.
 
 ##### 1.1.2 주요 개념
